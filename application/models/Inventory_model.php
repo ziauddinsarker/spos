@@ -440,10 +440,8 @@ class Inventory_model extends CI_Model
                     customer_id";
             return $this->db->query($sql);
         }
-		
-		
-		
-        function count_all_invoice()
+
+        function count_all_invoice($store_id)
         {
             $this->db->select('*');
             //$this->db->select('SUM(quantity)as quantity ,SUM(amount) as subtotal,sum(discount_amount) as totalDiscount,(SUM(amount)-sum(discount_amount)) as total');
@@ -451,11 +449,34 @@ class Inventory_model extends CI_Model
             $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
             $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
             $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
-            $this->db->group_by('customer_id');
+            $this->db->where('store_id',$store_id);
+            //$this->db->group_by('customer_id');
+            $this->db->group_by('store_id');
             $norow = $this->db->count_all('tbl_customer');
            // $query = $this->db->get();
             return $norow;
-        } 
+        }
+
+        function count_all_outlet_invoice($store_id)
+        {
+            $this->db->select('*');
+            //$this->db->select('SUM(quantity)as quantity ,SUM(amount) as subtotal,sum(discount_amount) as totalDiscount,(SUM(amount)-sum(discount_amount)) as total');
+            $this->db->from('tbl_customer');
+            $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+            $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+            $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+            $this->db->where('store_id',$store_id);
+            $this->db->group_by('customer_id');
+            //$query = $this->db->get();
+            //$norow = $this->db->count_all_results();
+           // $query = $this->db->get();
+
+
+            $query = $this->db->get();
+            $rowcount = $query->num_rows();
+
+            return $rowcount;
+        }
 		
 		 function count_all_sell_today()
         {
@@ -536,9 +557,10 @@ class Inventory_model extends CI_Model
             return $query->result();
         }
 
-        function get_left_product_on_inventory($product_id = NULL){
-            $this->db->select('product_id,product_left,product_sold');
+        function get_left_product_on_inventory($product_id = NULL, $store_id){
+            $this->db->select('store,product_id,product_left,product_sold');
             $this->db->from('tbl_inventory');
+            $this->db->where('store',$store_id);
             $this->db->where('product_id',$product_id);
             $query = $this->db->get();
             return $query->result();

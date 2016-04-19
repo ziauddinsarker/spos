@@ -4,7 +4,17 @@
     <div>
         <h1>All Invoice</h1>
     </div>
-    
+    <?php
+    $user = $this->ion_auth->user()->row();
+    if($user->username == 'admin'){
+        ?>
+        <div class="form-group">
+            <label for="location" class="control-label col-xs-2">Booking Code</label>
+            <div class="col-xs-10">
+                <input type="text" name="booking-code" class="form-control" placeholder="Booking Code">
+            </div>
+        </div>
+
     <h3>Total Invoice: <?php echo $count_invoice; ?></h3>
     <form class="form-inline" role="form" action="<?=  base_url()?>inventory/gettotalreport" method="post">
         <input class="btn btn-default" type="submit" value="Get Report">
@@ -12,6 +22,8 @@
 	<form class="form-inline" role="form" action="<?=  base_url()?>inventory/gettotalverbosereport" method="post">
         <input class="btn btn-default" type="submit" value="Get Verbose Report">
     </form>
+
+    <?php } 	?>
     <table class="table table-bordered table-hover">
         <thead>
             <th>SI No.</th>

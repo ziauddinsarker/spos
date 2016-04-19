@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50625
 File Encoding         : 65001
 
-Date: 2016-04-07 18:38:15
+Date: 2016-04-19 18:08:18
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -45,18 +45,13 @@ CREATE TABLE `tbl_challan` (
   `challan_date` date DEFAULT NULL,
   `challan_time` time DEFAULT NULL,
   PRIMARY KEY (`challan_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of tbl_challan
 -- ----------------------------
-INSERT INTO `tbl_challan` VALUES ('1', 'Challan 01', 'Factory', '2016-04-06', '02:15:54');
-INSERT INTO `tbl_challan` VALUES ('2', 'Challan 01', 'Factory', '2016-04-06', '02:29:18');
-INSERT INTO `tbl_challan` VALUES ('3', 'Challan 01', 'Factory', '2016-04-06', '02:29:48');
-INSERT INTO `tbl_challan` VALUES ('4', 'Challan 01', 'Factory', '2016-04-06', '02:34:14');
-INSERT INTO `tbl_challan` VALUES ('5', 'Challan 01', 'Factory', '2016-04-06', '02:34:48');
-INSERT INTO `tbl_challan` VALUES ('6', 'Challan 01', 'Factory', '2016-04-06', '02:35:34');
-INSERT INTO `tbl_challan` VALUES ('7', 'Challan 02', 'Factory', '2016-04-07', '01:45:43');
+INSERT INTO `tbl_challan` VALUES ('1', 'Challan 02', 'Factory', '2016-04-18', '01:41:35');
+INSERT INTO `tbl_challan` VALUES ('2', 'Challan 01', 'Factory', '2016-04-18', '01:41:55');
 
 -- ----------------------------
 -- Table structure for tbl_customer
@@ -70,14 +65,19 @@ CREATE TABLE `tbl_customer` (
   `customer_address` varchar(255) DEFAULT NULL,
   `sell_by` int(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of tbl_customer
 -- ----------------------------
 INSERT INTO `tbl_customer` VALUES ('1', '', '', '', '', '7');
 INSERT INTO `tbl_customer` VALUES ('2', '', '', '', '', '8');
-INSERT INTO `tbl_customer` VALUES ('3', '', '', '', '', '7');
+INSERT INTO `tbl_customer` VALUES ('3', '', '', '', '', '8');
+INSERT INTO `tbl_customer` VALUES ('4', '', '', '', '', '7');
+INSERT INTO `tbl_customer` VALUES ('5', '', '', '', '', '8');
+INSERT INTO `tbl_customer` VALUES ('6', 'w', '', '', '', '8');
+INSERT INTO `tbl_customer` VALUES ('7', '', '', '', '', '8');
+INSERT INTO `tbl_customer` VALUES ('8', '', '', '', '', '7');
 
 -- ----------------------------
 -- Table structure for tbl_inventory
@@ -93,17 +93,15 @@ CREATE TABLE `tbl_inventory` (
   PRIMARY KEY (`id`),
   KEY `fk_product` (`product_id`),
   CONSTRAINT `fk_product` FOREIGN KEY (`product_id`) REFERENCES `tbl_product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of tbl_inventory
 -- ----------------------------
-INSERT INTO `tbl_inventory` VALUES ('1', '3', '15', '5', '1', '7');
-INSERT INTO `tbl_inventory` VALUES ('2', '27', '20', null, '1', '7');
-INSERT INTO `tbl_inventory` VALUES ('3', '17', '151', '9', '3', '8');
-INSERT INTO `tbl_inventory` VALUES ('4', '14', '5', '5', '3', '8');
-INSERT INTO `tbl_inventory` VALUES ('5', '19', '150', null, '6', '7');
-INSERT INTO `tbl_inventory` VALUES ('6', '58', '3', '7', '7', '7');
+INSERT INTO `tbl_inventory` VALUES ('1', '58', '2', '8', '1', '7');
+INSERT INTO `tbl_inventory` VALUES ('2', '3', '4', '6', '1', '7');
+INSERT INTO `tbl_inventory` VALUES ('3', '58', '1', '9', '2', '8');
+INSERT INTO `tbl_inventory` VALUES ('4', '3', '3', '7', '2', '8');
 
 -- ----------------------------
 -- Table structure for tbl_order
@@ -113,21 +111,29 @@ CREATE TABLE `tbl_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) DEFAULT NULL,
   `customer_id` int(11) DEFAULT NULL,
+  `store_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_order_id` (`order_id`),
   KEY `fk_customer_id` (`customer_id`),
   CONSTRAINT `fk_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `tbl_customer` (`id`),
   CONSTRAINT `fk_order_id` FOREIGN KEY (`order_id`) REFERENCES `tbl_orderdetail` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of tbl_order
 -- ----------------------------
-INSERT INTO `tbl_order` VALUES ('1', '1', '1');
-INSERT INTO `tbl_order` VALUES ('2', '2', '1');
-INSERT INTO `tbl_order` VALUES ('3', '3', '2');
-INSERT INTO `tbl_order` VALUES ('4', '4', '2');
-INSERT INTO `tbl_order` VALUES ('5', '5', '3');
+INSERT INTO `tbl_order` VALUES ('1', '1', '1', '7');
+INSERT INTO `tbl_order` VALUES ('2', '2', '1', '7');
+INSERT INTO `tbl_order` VALUES ('3', '3', '2', '8');
+INSERT INTO `tbl_order` VALUES ('4', '4', '2', '8');
+INSERT INTO `tbl_order` VALUES ('5', '5', '3', '8');
+INSERT INTO `tbl_order` VALUES ('6', '6', '3', '8');
+INSERT INTO `tbl_order` VALUES ('7', '7', '4', '7');
+INSERT INTO `tbl_order` VALUES ('8', '8', '4', '7');
+INSERT INTO `tbl_order` VALUES ('9', '9', '5', '8');
+INSERT INTO `tbl_order` VALUES ('10', '10', '6', '8');
+INSERT INTO `tbl_order` VALUES ('11', '11', '7', '8');
+INSERT INTO `tbl_order` VALUES ('12', '12', '8', '7');
 
 -- ----------------------------
 -- Table structure for tbl_orderdetail
@@ -143,19 +149,27 @@ CREATE TABLE `tbl_orderdetail` (
   `amount` decimal(8,2) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `invoice_no` varchar(255) DEFAULT NULL,
+  `booking_code` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_product_code` (`product_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of tbl_orderdetail
 -- ----------------------------
-INSERT INTO `tbl_orderdetail` VALUES ('1', '58', '5', '1750.00', '0', '0.00', '8750.00', '2016-04-07', 'SIN-070416-001-0001', '2016-04-07 17:46:21');
-INSERT INTO `tbl_orderdetail` VALUES ('2', '3', '5', '2250.00', '0', '0.00', '11250.00', '2016-04-07', 'SIN-070416-001-0001', '2016-04-07 17:46:21');
-INSERT INTO `tbl_orderdetail` VALUES ('3', '14', '5', '1050.00', '0', '0.00', '5250.00', '2016-04-07', 'SIN-070416-002-0002', '2016-04-07 17:46:43');
-INSERT INTO `tbl_orderdetail` VALUES ('4', '17', '9', '3000.00', '0', '0.00', '27000.00', '2016-04-07', 'SIN-070416-002-0002', '2016-04-07 17:46:43');
-INSERT INTO `tbl_orderdetail` VALUES ('5', '58', '2', '1750.00', '0', '0.00', '3500.00', '2016-04-07', 'SIN-070416-003-0003', '2016-04-07 18:13:45');
+INSERT INTO `tbl_orderdetail` VALUES ('1', '58', '5', '1750.00', '0', '0.00', '8750.00', '2016-04-18', 'SIN-OL-180416-001-0001', null, '2016-04-18 17:42:08');
+INSERT INTO `tbl_orderdetail` VALUES ('2', '3', '5', '2250.00', '0', '0.00', '11250.00', '2016-04-18', 'SIN-OL-180416-001-0001', null, '2016-04-18 17:42:08');
+INSERT INTO `tbl_orderdetail` VALUES ('3', '58', '5', '1750.00', '0', '0.00', '8750.00', '2016-04-18', 'SIN-OT1-180416-001-0001', null, '2016-04-18 17:42:43');
+INSERT INTO `tbl_orderdetail` VALUES ('4', '3', '5', '2250.00', '0', '0.00', '11250.00', '2016-04-18', 'SIN-OT1-180416-001-0001', null, '2016-04-18 17:42:43');
+INSERT INTO `tbl_orderdetail` VALUES ('5', '58', '1', '1750.00', '0', '0.00', '1750.00', '2016-04-18', 'SIN-OT1-180416-002-0002', null, '2016-04-18 17:42:58');
+INSERT INTO `tbl_orderdetail` VALUES ('6', '3', '1', '2250.00', '0', '0.00', '2250.00', '2016-04-18', 'SIN-OT1-180416-002-0002', null, '2016-04-18 17:42:58');
+INSERT INTO `tbl_orderdetail` VALUES ('7', '58', '1', '1750.00', '0', '0.00', '1750.00', '2016-04-18', 'SIN-OL-180416-002-0002', null, '2016-04-18 17:43:17');
+INSERT INTO `tbl_orderdetail` VALUES ('8', '3', '1', '2250.00', '0', '0.00', '2250.00', '2016-04-18', 'SIN-OL-180416-002-0002', null, '2016-04-18 17:43:17');
+INSERT INTO `tbl_orderdetail` VALUES ('9', '58', '2', '1750.00', '0', '0.00', '3500.00', '2016-04-18', 'SIN-OT1-180416-003-0003', null, '2016-04-18 17:54:25');
+INSERT INTO `tbl_orderdetail` VALUES ('10', '58', '1', '1750.00', '0', '0.00', '1750.00', '2016-04-18', 'SIN-OT1-180416-004-0004', 'FB-001', '2016-04-18 17:56:57');
+INSERT INTO `tbl_orderdetail` VALUES ('11', '3', '1', '2250.00', '0', '0.00', '2250.00', '2016-04-19', 'SIN-OT1-190416-001-0005', null, '2016-04-19 16:45:23');
+INSERT INTO `tbl_orderdetail` VALUES ('12', '58', '2', '1750.00', '0', '0.00', '3500.00', '2016-04-19', 'SIN-OL-190416-001-0003', '', '2016-04-19 16:46:08');
 
 -- ----------------------------
 -- Table structure for tbl_product
@@ -422,9 +436,9 @@ CREATE TABLE `users` (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', '127.0.0.1', 'admin', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', null, null, null, null, '1268889823', '1460029753', '1', 'Admin', 'istrator', 'ADMIN', '0');
-INSERT INTO `users` VALUES ('7', '127.0.0.1', 'aslam', '$2y$08$2c4wydArnkhg3u8GGSmg/e7GrtV1OwO9TbdJA2bP4oHFWH24EF5Tm', null, 'designer@simuragroup.com', null, null, null, null, '1451381608', '1460029488', '1', 'Aslam', 'Uddin', 'SIMURA Non Wovens Ltd.', '017');
-INSERT INTO `users` VALUES ('8', '127.0.0.1', 'outlet1', '$2y$08$dMU1oTWxI87LSa2AkC5Hq.S3BoQ8RPCTeH.f.GHnlsKl4QmQa76Mq', null, 'outlet1@simuragroup.com', null, null, null, null, '1455704819', '1460030605', '1', 'Outlet 1', 'Aziz Super Market', 'SIMURA Non-Wovens Ltd.', '01720223388');
+INSERT INTO `users` VALUES ('1', '127.0.0.1', 'admin', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', null, null, null, null, '1268889823', '1461065740', '1', 'Admin', 'istrator', 'ADMIN', '0');
+INSERT INTO `users` VALUES ('7', '127.0.0.1', 'online', '$2y$08$2c4wydArnkhg3u8GGSmg/e7GrtV1OwO9TbdJA2bP4oHFWH24EF5Tm', null, 'designer@simuragroup.com', null, null, null, null, '1451381608', '1461062748', '1', 'Online', 'Sales', 'SIMURA Non Wovens Ltd.', '017');
+INSERT INTO `users` VALUES ('8', '127.0.0.1', 'outlet1', '$2y$08$dMU1oTWxI87LSa2AkC5Hq.S3BoQ8RPCTeH.f.GHnlsKl4QmQa76Mq', null, 'outlet1@simuragroup.com', null, null, null, null, '1455704819', '1461062574', '1', 'Outlet 1', 'Aziz Super Market', 'SIMURA Non-Wovens Ltd.', '01720223388');
 
 -- ----------------------------
 -- Table structure for users_groups

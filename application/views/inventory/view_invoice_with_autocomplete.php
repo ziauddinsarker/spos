@@ -32,6 +32,17 @@
 							<input type="text" name="email" class="form-control" placeholder="Email">
 						</div>
 					</div>
+					<?php
+					$user = $this->ion_auth->user()->row();
+					if($user->username == 'online'){
+					?>
+					<div class="form-group">
+						<label for="location" class="control-label col-xs-2">Address</label>
+						<div class="col-xs-10">
+							<input type="text" name="address" class="form-control" placeholder="Address">
+						</div>
+					</div>
+					<?php } ?>
 				</div>
 
 				<div class="col-md-4">
@@ -48,15 +59,32 @@
 							<input type="text" name="invoice-no" class="form-control" placeholder="Invoice No." value="<?php echo $invoiceno?>" readonly="readonly">
 						</div>
 					</div>
+					<?php
+					$user = $this->ion_auth->user()->row();
+					if($user->username != 'online'){
+						?>
+						<div class="form-group">
+							<label for="location" class="control-label col-xs-2">Address</label>
+							<div class="col-xs-10">
+								<input type="text" name="address" class="form-control" placeholder="Address">
+							</div>
+						</div>
+					<?php } ?>
 
+					<?php
+						$user = $this->ion_auth->user()->row();
+					if($user->username == 'online'){
+					?>
 					<div class="form-group">
-						<label for="location" class="control-label col-xs-2">Address</label>
+						<label for="location" class="control-label col-xs-2">Booking Code</label>
 						<div class="col-xs-10">
-							<input type="text" name="address" class="form-control" placeholder="Address">
+							<input type="text" name="booking-code" class="form-control" placeholder="Booking Code">
 						</div>
 					</div>
+					<?php } 	?>
 				</div>
 			</div>
+			<br>
 		</div>
 	<div class="col-md-9">
 
@@ -106,7 +134,7 @@
 			</div>
 
 		<input type="hidden" name="sellsperson" value="<?php $user = $this->ion_auth->user()->row(); echo $user->id;?>">
-		<input type="submit" class="btn btn-primary inv-btn" name="save" value="Print">
+		<input type="submit" class="btn btn-primary inv-btn" name="save" value="Save">
 		<!--<input type="submit" class="btn btn-primary inv-btn" name="print" value="Print" formtarget="_blank">-->
 		</div>
 	</form>

@@ -719,6 +719,13 @@ class Inventory extends CI_Controller {
 		$this->load->view('admin/admin_footer_view',$this->data);
 	}
 
+	function transfer_or_return(){
+		//$data['product'] = $this->inventory_model->get_product();
+		$this->load->view('admin/admin_header_view',$this->data);
+		$this->load->view('inventory/view_transfter_or_return_to_inventory');
+		$this->load->view('admin/admin_footer_view',$this->data);
+	}
+
 	/**
 	 * Save New product to inventory
 	 */
@@ -747,8 +754,10 @@ class Inventory extends CI_Controller {
 			//echo "-----------Product Quantity ----------";
 			//var_dump($product_quantity);
 
+			$store_id = $this->session->userdata('user_id');
 			$this->db->select('product_id');
 			$this->db->from('tbl_inventory');
+			$this->db->where('store', $store_id);
 			$this->db->where('product_id', $product_id);
 			$num_rows = $this->db->count_all_results();
 
@@ -897,8 +906,8 @@ class Inventory extends CI_Controller {
 			$this->data['show_date'] = $this->input->post('date');
 
 			$this->data['invoices'] = $this->inventory_model->get_all_invoice_by_date(100,$offset, $date);
-			$user_id = $this->session->userdata('user_id');
-			$this->data['count_invoice'] = $this->inventory_model->count_all_invoice($user_id);
+			//$user_id = $this->session->userdata('user_id');
+			$this->data['count_invoice'] = $this->inventory_model->count_all_invoice();
 			$this->data['total_sold_by']= $this->inventory_model->count_sold_by_seller();
 			//var_dump($this->data['total_sold_by']);
 
@@ -1062,64 +1071,6 @@ class Inventory extends CI_Controller {
 		force_download($name, $data);
 	}
 
-
-
-	public function invoice_number(){
-		//Get Today's Date
-		$today = date("dmy");
-
-		/*
-		$this->db->select('tbl_customer.id AS customerid,tbl_orderdetail.date as date');
-		$this->db->from('tbl_customer');
-		$this->db->join('tbl_order','tbl_order ON tbl_order.customer_id = tbl_customer.id');
-		$this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
-		$this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
-		$this->db->group_by('customerid');
-		*/
-		$this->db->select('id');
-		$this->db->from('tbl_order');
-		$query = $this->db->get();
-
-		if ($query->num_rows() > 0) {
-			foreach ($query->result() as $row)
-			{
-				$totalInvoice  = $row->id;
-			}
-		} else {
-			$firstinvoiceno = "SIN-".$today."-1-0001";
-			return $firstinvoiceno;
-		}
-
-		//$prefix
-		$prefix = "SIN-".$today."-".$totalInvoice."-";
-
-		//$idonly = 55;
-		$leadingzeros = '0000';
-
-		//Get Last Id
-		//$this->db->select('MAX(id) as last');
-		//$this->db->from('tbl_order');
-		//$this->db->order_by('id', "ASC");
-		//$this->db->limit(1);
-		//$query = $this->db->get();
-		//
-		//Get Last Id
-		$this->db->select('*');
-		$this->db->from('tbl_orderdetail');
-		$this->db->limit(1);
-		$query = $this->db->get();
-
-		foreach ($query->result() as $row)
-		{
-			$idonly  = $row->date;
-		}
-
-		return $prefix.substr($leadingzeros, 0, (-strlen($idonly))).$idonly;
-		// outputs
-
-
-	}
-
 	function invno(){
 		//Today
 		$today = date("dmy");
@@ -1176,6 +1127,94 @@ class Inventory extends CI_Controller {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
+	function invno_outlet(){
+
+		$today = date("dmy");
+		$store_id = $this->session->userdata('user_id');
+		$total_invoice = $this->inventory_model->count_all_outlet_invoice($store_id);
+
+		echo "Total Invoice: ";
+		var_dump($total_invoice);
+
+		$leadingzeros = '0000';
+		$dailyleadingzeros = '000';
+		$total_invoice = $total_invoice + 1;
+
+		//Query for maximum date in orderdails for last order date
+		$this->db->select('max(date) as date');
+		$this->db->from('tbl_orderdetail');
+		$querymaxdate = $this->db->get();
+
+		foreach ($querymaxdate->result() as $row) {
+			$lastdate = $row->date;
+		}
+
+		//var_dump($lastdate);
+		$todaydate = date('Y-m-d');
+
+		$this->db->select('COUNT(date)as date,tbl_product.product_code,tbl_customer.customer_name,tbl_customer.sell_by,store_id');
+		$this->db->from('tbl_customer');
+		$this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+		$this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+		$this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+		$this->db->where('store_id',$store_id);
+		$this->db->where('date',$todaydate);
+		$this->db->group_by('invoice_no');
+
+		$querytotalselltoday = $this->db->get();
+
+		$total_today = $querytotalselltoday->num_rows();
+
+		if ($querytotalselltoday->num_rows() > 0) {
+			if ($todaydate == $lastdate) {
+				$total_today = $total_today + 1;
+			}else {
+				$total_today = 1;
+			}
+
+		}else{
+			$total_today = 1;
+		}
+
+		//Check if there is no invoice in total invoice
+		//Today
+		//Get username and changed based on username like if outlet1 it will change to OT1 and if Outlet2 it will change to OT2
+		//And for Online sell it will be OL
+		$username = $this->session->userdata('username');
+		switch ($username) {
+			case "online":
+				$username = "OL";
+				break;
+			case "outlet1":
+				$username = "OT1";
+				break;
+			case "outlet2":
+				$username = "OT2";
+				break;
+			case "outlet3":
+				$username = "OT3";
+				break;
+			default:
+				$username = "OL";
+		}
+
+
+		if($total_invoice == 0 ){
+			$total_invoice = 1;
+
+			$firstinvoiceno = "SIN-". $username . $today."-1-".substr($leadingzeros, 0, (-strlen($total_invoice))).$total_invoice;
+			return $firstinvoiceno;
+		}else{
+			$total_invoice = $total_invoice;
+
+			$firstinvoiceno = "SIN-". $username ."-".$today."-". substr($dailyleadingzeros, 0, (-strlen($total_today))).$total_today ."-".substr($leadingzeros, 0, (-strlen($total_invoice))).$total_invoice;
+			return $firstinvoiceno;
+		}
+	}
+
 
 	public function invoice(){
 		if (!$this->ion_auth->logged_in()) {
@@ -1183,7 +1222,9 @@ class Inventory extends CI_Controller {
 			redirect('login/index', 'refresh');
 		} else {
 			//$data['invoiceno'] = $this->invoice_number();
-			$data['invoiceno'] = $this->invno();
+			//$data['invoiceno'] = $this->invno();
+
+			$data['invoiceno'] = $this->invno_outlet();
 
 			//var_dump($data['invoiceno']);
 			//$data['product'] = $this->inventory_model->get_product_code();
@@ -1261,10 +1302,15 @@ class Inventory extends CI_Controller {
 		$customer_id = $this->db->insert_id();
 
 		for ($i = 0; $i < count($this->input->post('productcode')); $i++){
+			//$store_id = $this->session->userdata('user_id');
+			//var_dump($store_id);
+
+			$sold_by = $this->input->post('sellsperson');
+
 
 			$product_id = $this->input->post('productcodeid')[$i];
 			$product_quantity = $this->input->post('quantity')[$i];
-			$inventory  = $this->inventory_model->get_left_product_on_inventory($product_id);
+			$inventory  = $this->inventory_model->get_left_product_on_inventory($product_id,$sold_by);
 
 			echo "Product id: ";
 			var_dump($product_id)[$i];
@@ -1283,7 +1329,7 @@ class Inventory extends CI_Controller {
 			}
 
 			$final_product_left = $product_left - $product_quantity;
-			$final_product_sold = $product_sold+ $product_quantity;
+			$final_product_sold = $product_sold + $product_quantity;
 
 			echo "Product Left: ";
 			var_dump($final_product_left);
@@ -1301,11 +1347,13 @@ class Inventory extends CI_Controller {
 			var_dump($inventory_detail);
 
 			$this->db->where('product_id',$product_id);
+			$this->db->where('store',$sold_by);
 			$this->db->update('tbl_inventory', $inventory_detail);
 
 
 				$order_detail = array(
 					'invoice_no' => $this->input->post('invoice-no'),
+					'booking_code' => $this->input->post('booking-code'),
 					'product_code' => $this->input->post('productcodeid')[$i],
 					'quantity' => $this->input->post('quantity')[$i],
 					'price' => $this->input->post('price')[$i],
@@ -1323,7 +1371,8 @@ class Inventory extends CI_Controller {
 
 				$order_data = array(
 					'order_id' => $order_id,
-					'customer_id' => $customer_id
+					'customer_id' => $customer_id,
+					'store_id' => $sold_by
 				);
 
 				$this->db->insert('tbl_order', $order_data);
@@ -1477,12 +1526,12 @@ class Inventory extends CI_Controller {
 		$this->fpdf->Ln(20);
 		//$this->fpdf->Cell(10);
 		//$this->fpdf->Cell(0,10,'In Word: '.$this->input->post('inword'),0,0,'L');
-		$this->fpdf->SetY(-50);
+		$this->fpdf->SetY(-30);
 		$this->fpdf->SetLineWidth(0.1);
-		$this->fpdf->SetDash(2,2); //5mm on, 5mm off
-		$this->fpdf->Line(250, 227, 0, 227);
+		$this->fpdf->SetDash(0,0); //5mm on, 5mm off
+		$this->fpdf->Line(250, 265, 0, 265);
 		//$this->fpdf->SetY(-80);
-		$this->fpdf->Image(base_url('assets/images/simcoupon.png'),30,230,150);
+		$this->fpdf->Image(base_url('assets/images/simura-ddress.png'),30,270,150);
 
 		//Open PDF on same page
 		$this->fpdf->Output("Invoice.pdf", "I");

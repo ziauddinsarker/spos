@@ -17,11 +17,13 @@ class Admin extends CI_Controller
 
 
         $this->data['total_invoice_today']= $this->inventory_model->count_daily_invoice();
-        $this->data['total_rows']= $this->inventory_model->count_all_invoice();
+
+        $user_id = $this->session->userdata('user_id');
+        $this->data['total_rows']= $this->inventory_model->count_all_invoice($user_id);
 
 
 
-        $all_sess = $this->session->all_userdata();
+        //$all_sess = $this->session->all_userdata();
         //var_dump($all_sess);
     }
 

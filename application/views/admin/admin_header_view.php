@@ -105,7 +105,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               $group = $this->ion_auth->get_users_groups()->row()->name;
               //var_dump($group);
 
-                if(!($group == 'admin' || $group == 'sales')) {
+                //if(!($group == 'admin' || $group == 'sales')) {
+                if(!($group == 'sales')) {
 
               }else{
              ?>
@@ -119,10 +120,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </a>
               <ul class="treeview-menu" style="display: none;">
                 <li><a href="<?=  base_url()?>inventory/add_to_inventory" marked="1"><i class="fa fa-circle-o"></i> Add Inventory</a></li>
-                <li><a href="<?=  base_url()?>inventory/add_product_name" marked="1"><i class="fa fa-circle-o"></i>Return/Transfer</a></li>
+                <li><a href="<?=  base_url()?>inventory/transfer_or_return" marked="1"><i class="fa fa-circle-o"></i>Return/Transfer</a></li>
            </ul>
             </li>
-           <?php if($group == 'admin'){ ?>
+
+
+              <li><a href="<?=  base_url()?>inventory/all_invoice" marked="1"><i class="fa fa-circle-o"></i> All Invoice</a></li>
+              <li><a href="<?=  base_url()?>inventory/get_daily_product_summary" marked="1"><i class="fa fa-circle-o"></i> Daily Summary</a></li>
+
+             <?php } ?>
+            <?php if($group == 'admin'){ ?>
+              <li class="treeview">
+                <a href="#" marked="1">
+                  <i class="fa fa-cog"></i> <span>Summary</span>
+                  <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu" style="display: none;">
+                  <li><a href="<?=  base_url()?>inventory/all_invoice" marked="1"><i class="fa fa-circle-o"></i> All Invoice</a></li>
+                  <li><a href="<?=  base_url()?>inventory/get_daily_product_summary" marked="1"><i class="fa fa-circle-o"></i> Daily Summary</a></li>
+                </ul>
+              </li>
               <li class="treeview">
                 <a href="#" marked="1">
                   <i class="fa fa-cog"></i> <span>Variables</span>
@@ -146,29 +163,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <ul class="treeview-menu" style="display: none;">
                   <li><a href="<?=  base_url()?>inventory/add_product"><i class="fa fa-th-list"></i> <span>Add Product<span></a></li>
                   <li><a href="<?=  base_url()?>store/add_store"><i class="fa fa-th-list"></i> <span>Add Store<span></a></li>
-              <li><a href="<?php  //base_url()?>store/add_sales_person"><i class="fa fa-th-list"></i> <span>Add Sales Person<span></a></li>
+                  <li><a href="<?php  //base_url()?>store/add_sales_person"><i class="fa fa-th-list"></i> <span>Add Sales Person<span></a></li>
 
                 </ul>
               </li>
-              <li class="treeview">
-                <a href="#" marked="1">
-                  <i class="fa fa-cog"></i> <span>Summary</span>
-                  <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu" style="display: none;">
-                  <li><a href="<?=  base_url()?>inventory/all_invoice" marked="1"><i class="fa fa-circle-o"></i> All Invoice</a></li>
-                  <li><a href="<?=  base_url()?>inventory/get_daily_product_summary" marked="1"><i class="fa fa-circle-o"></i> Daily Summary</a></li>
-                </ul>
-              </li>
+
 
 
             <?php } ?>
-
-              <li><a href="<?=  base_url()?>inventory/all_invoice" marked="1"><i class="fa fa-circle-o"></i> All Invoice</a></li>
-              <li><a href="<?=  base_url()?>inventory/get_daily_product_summary" marked="1"><i class="fa fa-circle-o"></i> Daily Summary</a></li>
-
-             <?php } ?>
-
             <?php if($group == 'admin'){  ?>
               <li><a href="<?=  base_url()?>auth/index"><i class="fa fa-th-list"></i> <span>Users<span></a></li>
             <?php } ?>
