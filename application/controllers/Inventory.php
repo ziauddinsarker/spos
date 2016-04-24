@@ -744,7 +744,6 @@ class Inventory extends CI_Controller {
 		$challan_id = $this->db->insert_id();
 
 		for($i = 0; $i < count($this->input->post('productcodeid-inventory')); $i++){
-
 			$product_id = $this->input->post('productcodeid-inventory')[$i];
 			$product_quantity = $this->input->post('quantity-inventory')[$i];
 
@@ -800,6 +799,115 @@ class Inventory extends CI_Controller {
 			}
 		redirect('inventory/index', 'refresh');
 
+	}
+
+	function save_product_transfer_or_received_at_inventory(){
+		$challan_data = array(
+			'challan_number'=> $this->input->post('chalan-or-inv-no'),
+			'challan_from'=> $this->input->post('from-transfer-or-received-inventory'),
+			'challan_date'=> date("Y-m-d"),
+			'challan_time'=> date("h:i:sa")
+		);
+		//echo "-----------Challan Data ----------";
+		//var_dump($challan_data);
+		//echo "-----------Challan Data ----------";
+
+		$this->db->insert('tbl_challan', $challan_data);
+		$challan_id = $this->db->insert_id();
+
+		/**
+		 * This is for transfer or received
+		 */
+		$transfer_received_data = array(
+			'challan_or_invoice_no'=> $challan_id,
+			'product_transfer_or_received'=> $this->input->post('transfer-or-received'),
+			'product_id'=> $this->input->post('productcodeid-inventory'),
+			'product_quantity'=> $this->input->post('quantity-transfer-or-received-inventory'),
+			'product_transfer_or_received_date'=> date("Y-m-d"),
+			'product_transfer_or_received_time'=> date("h:i:sa"),
+			'store'=>  $this->input->post('storeid'),
+
+		);
+		//echo "-----------Challan Data ----------";
+		//var_dump($transfer_received_data);
+		//echo "-----------Challan Data ----------";
+
+		$this->db->insert('tbl_inventory_transfer_received', $transfer_received_data);
+
+
+			$product_id = $this->input->post('productcodeid-inventory');
+			$product_quantity = $this->input->post('quantity-transfer-or-received-inventory');
+
+			//echo "-----------Product Data ----------";
+			//echo "-----------Product ID ----------";
+			//var_dump($product_id);
+			//echo "-----------Product Quantity ----------";
+			//var_dump($product_quantity);
+
+			$store_id = $this->session->userdata('user_id');
+			$this->db->select('product_id');
+			$this->db->from('tbl_inventory');
+			$this->db->where('store', $store_id);
+			$this->db->where('product_id', $product_id);
+			$num_rows = $this->db->count_all_results();
+
+
+		/**
+		 * If Transfer then minus form inventory
+		 * If Recieved then add to inventory
+		 */
+
+
+		//If row number is zero then save data to new row
+			if(($num_rows == NULL || $num_rows == '' ||$num_rows == 0) && (($this->input->post('transfer-or-received'))=="Received") ) {
+				$store_name =  $this->session->userdata('user_id');
+				$product_data = array(
+					'product_id' => $product_id,
+					'product_left' => $product_quantity,
+					'challan_no' => $challan_id,
+					'store'=> $store_name
+				);
+				//echo "-----------Product Data----------";
+				//var_dump($product_data);
+				//echo "-----------Product Data----------";
+
+				$this->db->insert('tbl_inventory', $product_data);
+			}
+
+			if($num_rows == 1){
+				//Get Existing Left Products
+				$product_left = $this->db->select('product_id,product_left,store')->get_where('tbl_inventory', array('product_id' => $product_id,'store'=> $store_id))->row()->product_left;
+
+				/**
+				 *
+				 */
+
+				echo "-----------Product Left Before Added----------";
+				var_dump($product_left);
+
+				$transfer_or_received = $this->input->post('transfer-or-received');
+				if($transfer_or_received == "Transfer"){
+					$product_left = $product_left - $product_quantity;
+				}else{
+					$product_left = $product_left + $product_quantity;
+				}
+
+
+				//echo "-----------Product Left After Added----------";
+				//var_dump($product_left);
+				$store_id =  $this->session->userdata('user_id');
+
+				$update_data = array(
+					'product_left' => $product_left,
+					'challan_no' => $challan_id,
+				);
+				$this->db->where('product_id', $product_id);
+				$this->db->where('store', $store_id);
+				$this->db->update('tbl_inventory', $update_data);
+			}
+
+
+		redirect('inventory/transfer_or_return', 'refresh');
 	}
 
 	/*

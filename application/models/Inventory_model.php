@@ -782,6 +782,26 @@ class Inventory_model extends CI_Model
 
         }
 
+
+    /**
+     * @param null $store_id
+     * @return mixed
+     * Transfer or Received Data
+     */
+    function get_transfer_or_received_data($store_id = NULL)
+    {
+        $this->db->select('tbl_product.product_code,tbl_inventory_transfer_received.product_quantity, tbl_challan.challan_number, tbl_challan.challan_from, tbl_challan.challan_date');
+        $this->db->from('tbl_inventory_transfer_received');
+        $this->db->join('tbl_challan','tbl_inventory_transfer_received.challan_or_invoice_no = tbl_challan.challan_id');
+        $this->db->join('tbl_product','tbl_inventory_transfer_received.product_id = tbl_product.id');
+        $this->db->where('store',$store_id);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+
+
+
         /**
          * @return array|bool
          */

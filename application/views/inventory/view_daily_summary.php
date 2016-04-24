@@ -5,7 +5,7 @@
          <h1 class="page-header">Daily Sell Summary</h1>
         <!-- <a class="btn btn-default" href="<?php //base_url();?>get_all_daily_product_summary">All Product Sell Summary</a> -->
         <?php foreach($sell_today as $sell){ ?>
-            <?php echo "<h4>Total Sell Today: " . $sell->total_sell_today ."</h4>" ?>
+            <?php // echo "<h4>Total Sell Today: " . $sell->total_sell_today ."</h4>" ?>
 
         <?php }  ?>
        
