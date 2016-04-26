@@ -8,12 +8,6 @@
     $user = $this->ion_auth->user()->row();
     if($user->username == 'admin'){
         ?>
-        <div class="form-group">
-            <label for="location" class="control-label col-xs-2">Booking Code</label>
-            <div class="col-xs-10">
-                <input type="text" name="booking-code" class="form-control" placeholder="Booking Code">
-            </div>
-        </div>
 
     <h3>Total Invoice: <?php echo $count_invoice; ?></h3>
     <form class="form-inline" role="form" action="<?=  base_url()?>inventory/gettotalreport" method="post">
@@ -33,7 +27,6 @@
             <th>Product Quantity</th>
             <th>Subtotal</th>
             <th>Discount</th>
-            <th>Delivery Charge</th>
             <th>Total</th>
             <th>Sold By</th>
             <th></th>
@@ -49,7 +42,6 @@
                 <td><?php echo $inv->quantity ;?></td>
                 <td><?php echo $inv->subtotal ;?></td>
                 <td><?php echo $inv->totalDiscount ;?></td>
-                <td><?php echo $inv->delivery_charge ;?></td>
                 <td><?php echo $inv->total ;?></td>
                 <td><?php echo $inv->first_name ;?></td>
 				<td><a class="btn btn-default" href="<?php base_url();?>print_later_from_invoice_data/<?php echo $inv->customer_id ;?>">Print</a></td>

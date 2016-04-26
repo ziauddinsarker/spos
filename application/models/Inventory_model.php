@@ -362,7 +362,7 @@ class Inventory_model extends CI_Model
         function get_all_invoice($offset, $limit,$user_id)
         {
             $this->db->select('*');
-            $this->db->select('SUM(quantity)as quantity ,SUM(amount) as subtotal,sum(discount_amount) as totalDiscount,(SUM(amount)-sum(discount_amount)) as total');
+            $this->db->select('SUM(quantity)as quantity ,SUM(amount) as subtotal,sum(discount_amount) as totalDiscount,delivery_charge,((SUM(amount)-sum(discount_amount)) + delivery_charge) as total');
             $this->db->from('tbl_customer');
             $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
             $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
@@ -372,6 +372,23 @@ class Inventory_model extends CI_Model
             $this->db->group_by('customer_id');
             $this->db->order_by('invoice_no','DESC');
 			
+            $this->db->limit($offset, $limit);
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+    function get_all_invoice_for_admin($offset, $limit)
+        {
+            $this->db->select('*');
+            $this->db->select('SUM(quantity)as quantity ,SUM(amount) as subtotal,sum(discount_amount) as totalDiscount,(SUM(amount)-sum(discount_amount)) as total');
+            $this->db->from('tbl_customer');
+            $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+            $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+            $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+            $this->db->join('users','users.id = tbl_customer.sell_by');
+            $this->db->group_by('customer_id');
+            $this->db->order_by('invoice_no','DESC');
+
             $this->db->limit($offset, $limit);
             $query = $this->db->get();
             return $query->result();
@@ -454,6 +471,19 @@ class Inventory_model extends CI_Model
             $this->db->group_by('store_id');
             $norow = $this->db->count_all('tbl_customer');
            // $query = $this->db->get();
+            return $norow;
+        }
+
+        function count_all_invoice_for_admin()
+        {
+            $this->db->select('*');
+           $this->db->from('tbl_customer');
+            $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+            $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+            $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+            $this->db->group_by('customer_id');
+            $norow = $this->db->count_all('tbl_customer');
+            // $query = $this->db->get();
             return $norow;
         }
 

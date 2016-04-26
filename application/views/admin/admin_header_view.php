@@ -162,8 +162,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
                 <ul class="treeview-menu" style="display: none;">
                   <li><a href="<?=  base_url()?>inventory/add_product"><i class="fa fa-th-list"></i> <span>Add Product<span></a></li>
-                  <li><a href="<?=  base_url()?>store/add_store"><i class="fa fa-th-list"></i> <span>Add Store<span></a></li>
-                  <li><a href="<?php  //base_url()?>store/add_sales_person"><i class="fa fa-th-list"></i> <span>Add Sales Person<span></a></li>
 
                 </ul>
               </li>

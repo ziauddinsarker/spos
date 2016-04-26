@@ -78,7 +78,8 @@
 	  </script>
 	  <script type="text/javascript">
           /**
-           * Get Product code from all products and show in the invoice. If there is no product in the inventory then can't make any invoice.
+           * Get Product code from all products and show in the invoice.
+           * If there is no product in the inventory then can't make any invoice.
            * Autocomplete field when trying to write product code.
            */
           $(document).on('focus','.autocomplete_inventory_product',function(){
@@ -183,8 +184,7 @@
           }
 
       </script>
-		
-		
+
 
 
 
@@ -199,7 +199,7 @@
 	 <script type="text/javascript">
         $(document).ready(function(){
 
-            $('.detail').delegate('.quantity,.price,.discount,.discount-amount,.inword','keyup',function(){
+            $('.detail').delegate('.quantity,.price,.discount,.discount-amount,.deliverycharge,.inword','keyup',function(){
                 var tr = $(this).parent().parent();
                 var qty = tr.find('.quantity').val();
                 var price = tr.find('.price').val();
@@ -221,10 +221,21 @@
 
                 subtotal();
                 discount();
+                //deliverycharge();
 
-                var total = gsubtotal - gdiscount;
+                //delchg = $(".deliverycharge").val();
+
+                //console.log(delchg);
+
+                //var delivecharge = tr.find('.deliverycharge').val();
+                deliverychrg = $(".deliverycharge").val()-0;
+
+
+                var total = (gsubtotal - gdiscount + deliverychrg);
                 $('.total').html(total);
-                $('.inWord').html(inWords(gsubtotal - gdiscount));
+                $('.inWord').html(inWords(gsubtotal - gdiscount + deliverychrg));
+
+                deliverycharge();
 
                 var inw = inWords(gsubtotal - gdiscount);
                 console.log(inw);
@@ -239,6 +250,41 @@
             });
 
         });
+        /**
+         *
+         *
+         *
+        */
+
+        function deliverycharge(){
+            $(".deliverycharge").keyup(function() {
+                deliverychrg = +$(".deliverycharge").val();
+
+                subtotal();
+                discount();
+
+                var total = (gsubtotal - gdiscount + deliverychrg);
+                $('.total').html(total);
+                $('.inWord').html(inWords(gsubtotal - gdiscount));
+
+
+            });
+        }
+        /*
+            var t = 0;
+            $('.deliverycharge').each(function (i,e) {
+                var amt = $(this).val()-0;
+                t += amt;
+            });
+
+            deliverychare = t;
+            }
+*/
+
+
+
+
+
         /**
          * Total Amount
          */

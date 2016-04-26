@@ -916,6 +916,63 @@ class Inventory extends CI_Controller {
 		echo json_encode($data);
 	}
 
+
+	/****************Invoice***************/
+	public function all_invoice_for_admin($offset = 0){
+		// Config setup
+		$config['base_url'] = base_url().'/inventory/all_invoice/';
+		//$config['total_rows']= $this->db->count_all('brand');
+		$config['total_rows']= $this->inventory_model->count_all_invoice_for_admin();
+
+		$config['per_page'] = 10;
+		// I added this extra one to control the number of links to show up at each page.
+		$config['num_links'] = 10;
+		/******************************/
+		$config['full_tag_open'] = '<ul class="pagination">';
+		$config['full_tag_close'] = '</ul>';
+		$config['first_link'] = false;
+		$config['last_link'] = false;
+		$config['first_tag_open'] = '<li>';
+		$config['first_tag_close'] = '</li>';
+		$config['prev_link'] = '&laquo';
+		$config['prev_tag_open'] = '<li class="prev">';
+		$config['prev_tag_close'] = '</li>';
+		$config['next_link'] = '&raquo';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['last_tag_open'] = '<li>';
+		$config['last_tag_close'] = '</li>';
+		$config['cur_tag_open'] = '<li class="active"><a href="#">';
+		$config['cur_tag_close'] = '</a></li>';
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+
+		/******************************/
+		// Initialize
+		$this->pagination->initialize($config);
+
+		if (!$this->ion_auth->logged_in()) {
+			// redirect them to the login page
+			redirect('login/index', 'refresh');
+		} else {
+			//$data['total_rows']= $this->inventory_model->count_all_invoice();
+			//var_dump($data['total_rows']);
+			$user_id = $this->session->userdata('user_id');
+
+			$this->data['invoices'] = $this->inventory_model->get_all_invoice_for_admin(10,$offset);
+			$this->data['count_invoice'] = $this->inventory_model->count_all_invoice_for_admin();
+			$this->data['total_sold_by']= $this->inventory_model->count_sold_by_seller();
+			$this->data['total_sold_amount_by']= $this->inventory_model->count_sold_amount_by_seller();
+			//var_dump($this->data['total_sold_by']);
+
+			$this->load->view('admin/admin_header_view',$this->data);
+			$this->load->view('inventory/view_all_invoice_for_admin',$this->data);
+			$this->load->view('admin/admin_footer_view',$this->data);
+		}
+	}
+
+
+
 	/****************Invoice***************/
 	public function all_invoice($offset = 0){
 		// Config setup
@@ -1468,6 +1525,7 @@ class Inventory extends CI_Controller {
 					'discount' => $this->input->post('discount')[$i],
 					'discount_amount' => $this->input->post('discountamount')[$i],
 					'amount' => $this->input->post('amount')[$i],
+					'delivery_charge' => $this->input->post('deliverycharge'),
 					'date' => date("Y-m-d"),
 				);
 
@@ -1543,7 +1601,7 @@ class Inventory extends CI_Controller {
 		$this->fpdf->cell(100, 6, ' ', 0, 1, 'L', 1);
 		$this->fpdf->setFont('Arial', '', 10);
 		$this->fpdf->setFillColor(255, 255, 255);
-		$this->fpdf->cell(70, 6, "Customer Name: " . $row->customer_name , 0, 0, 'L', 1);
+		$this->fpdf->cell(64.5, 6, "Name: " . $row->customer_name , 0, 0, 'L', 1);
 		$this->fpdf->cell(90, 6, "Date : " . $row->date, 0, 1, 'R', 1);
 
 		$this->fpdf->cell(50, 6, "Phone: " . $row->customer_phone, 0, 0, 'L', 1);
@@ -1606,7 +1664,7 @@ class Inventory extends CI_Controller {
 		}
 
 
-		$this->db->select('SUM(amount) AS subtotal, SUM(discount_amount) AS totaldiscount');
+		$this->db->select('delivery_charge, SUM(amount) AS subtotal, SUM(discount_amount) AS totaldiscount');
 		$this->db->from('tbl_customer');
 		$this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
 		$this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
@@ -1627,8 +1685,12 @@ class Inventory extends CI_Controller {
 			$this->fpdf->cell(40, 6, $row->totaldiscount, 1, 0,'R',1);
 			$this->fpdf->Ln(6);
 			$this->fpdf->Cell(120);
+			$this->fpdf->cell(30, 6, 'Delivery Charge', 1, 0, 1);
+			$this->fpdf->cell(40, 6, $row->delivery_charge, 1, 0,'R',1);
+			$this->fpdf->Ln(6);
+			$this->fpdf->Cell(120);
 			$this->fpdf->cell(30, 6, 'Grand Total', 1, 0, 1);
-			$this->fpdf->cell(40, 6, ($row->subtotal - $row->totaldiscount).".00", 1, 0,'R',1);
+			$this->fpdf->cell(40, 6, (($row->subtotal - $row->totaldiscount) + $row->delivery_charge ).".00", 1, 0,'R',1);
 		}
 
 		$this->fpdf->Ln(20);

@@ -127,6 +127,11 @@
 				<th >Discount</th>
 				<th style="text-align: center; background: silver;" colspan="1" ><span class="discount"></span> tk</th>
 			</tfoot>
+		   <tfoot>
+				<th class="no-style" colspan="8"></th>
+				<th >Delivery Charge</th>
+				<th style="text-align: center; background: silver;" colspan="1" ><span class="delivery-charge"><input type="text" class=" deliverycharge" name="deliverycharge"></span> tk</th>
+			</tfoot>
 
 		</table>
 			<div><b>In Words :</b> <span class="inWord"></span>

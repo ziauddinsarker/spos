@@ -8,7 +8,8 @@
             <?php // echo "<h4>Total Sell Today: " . $sell->total_sell_today ."</h4>" ?>
 
         <?php }  ?>
-       
+       <?php
+       /*
         <form class="form-inline" role="form" action="<?=  base_url()?>inventory/get_daily_product_summary" method="post">
             <input type="text" class="form-control" value="<?php echo $show_date ?>" name="date" id="date" placeholder="Date" onchange="this.form.submit()" required>
             <noscript><input type="submit" value="Submit"></noscript>
@@ -18,7 +19,8 @@
             <input type="hidden" class="form-control" name="datereport" id="datereport" value="<?php echo $show_date ?>">
             <input type="submit" class="btn btn-default" value="Get Report">
         </form>
-
+*/
+       ?>
     </div>
 
     <table class="table table-bordered table-hover">
