@@ -114,6 +114,27 @@ class Inventory_model extends CI_Model
     }
 
     /**
+     * @param $keyword
+     * @return mixed
+     */
+    function get_sold_amount_by_date(){
+        $this->db->select('tbl_orderdetail.date,
+                            tbl_product.product_code,
+                            tbl_product.product_price,
+                            Sum(tbl_orderdetail.quantity) AS totalquantity,
+                            Sum(tbl_orderdetail.amount) AS subtotal,
+                            Sum(tbl_orderdetail.discount_amount) AS discount,
+                            (SUM(amount)-sum(discount_amount)) AS total');
+        $this->db->from('tbl_customer');
+        $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+        $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+        $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+        $this->db->group_by('tbl_orderdetail.date');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    /**
      *
      */
     function get_product_from_all_products($keyword){
@@ -462,16 +483,31 @@ class Inventory_model extends CI_Model
         {
             $this->db->select('*');
             //$this->db->select('SUM(quantity)as quantity ,SUM(amount) as subtotal,sum(discount_amount) as totalDiscount,(SUM(amount)-sum(discount_amount)) as total');
-            $this->db->from('tbl_customer');
-            $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
-            $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
-            $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
-            $this->db->where('store_id',$store_id);
-            //$this->db->group_by('customer_id');
-            $this->db->group_by('store_id');
-            $norow = $this->db->count_all('tbl_customer');
-           // $query = $this->db->get();
-            return $norow;
+            //$this->db->from('tbl_customer');
+            $this->db->from('tbl_order');
+           // $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+            //$this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+            //$this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+           // $this->db->group_by('tbl_order.customer_id');
+            //$this->db->where('sell_by',$store_id);
+            $this->db->where('tbl_order.store_id',$store_id);
+            $this->db->group_by('tbl_order.customer_id');
+            //$this->db->group_by('store_id');
+            //$norow = $this->db->count_all('tbl_customer');
+            //$norow = $this->db->count_all_results();;
+           $query = $this->db->get();
+            $rowcount = $query->num_rows();
+            //return $norow;
+            return $rowcount;
+        }
+
+        function count_all_inventory($store_id)
+        {
+            $this->db->select('tbl_inventory.store,SUM(product_left) as Inventory');
+            $this->db->from('tbl_inventory');
+            $this->db->where('tbl_inventory.store',$store_id);
+            $query = $this->db->get();
+            return $query->result();
         }
 
         function count_all_invoice_for_admin()
@@ -508,7 +544,20 @@ class Inventory_model extends CI_Model
             return $rowcount;
         }
 		
-		 function count_all_sell_today()
+        function count_total_sell_today($user_id)
+        {
+            $today = date('Y-m-d');
+            $this->db->select('store_id,date,(SUM(amount)-SUM(discount_amount)) as daily_total_sell');
+            $this->db->from('tbl_orderdetail');
+            $this->db->join('tbl_order','tbl_order.order_id = tbl_orderdetail.id');
+            $this->db->where('date',$today);
+            $this->db->where('store_id',$user_id);
+            $this->db->limit(1);
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+    function count_all_sell_today()
         {
             $today = date('Y-m-d');
             $this->db->select('date,(SUM(amount)-sum(discount_amount)) as total_sell_today');
@@ -525,7 +574,7 @@ class Inventory_model extends CI_Model
 
 		function count_sold_by_seller()
         {
-            $this->db->select('users.first_name, COUNT(users.first_name) as total_no_of_sell');
+            $this->db->select('users.id as userid,users.first_name, COUNT(users.first_name) as total_no_of_sell');
              $this->db->from('tbl_customer');
             $this->db->join('users','users.id = tbl_customer.sell_by');
             $this->db->group_by('users.first_name');
@@ -629,7 +678,7 @@ class Inventory_model extends CI_Model
             return $query->result();
         }
 		
-		function get_all_daily_product_summary()
+		function get_all_daily_product_summary_admin()
         {
             $this->db->select('*');
             $this->db->select('tbl_orderdetail.date,
@@ -644,6 +693,28 @@ class Inventory_model extends CI_Model
             $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
             $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
             $this->db->group_by('tbl_product.product_code');
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        function get_single_product_summary_admin($product_code)
+        {
+            $this->db->select('*');
+            $this->db->select('tbl_orderdetail.date,
+                                tbl_product.product_code,
+                                tbl_orderdetail.price,
+                                Sum(tbl_orderdetail.quantity) AS totalquantity,
+                                Sum(tbl_orderdetail.amount) AS subtotal,
+                                Sum(tbl_orderdetail.discount_amount) AS discount,
+                                (SUM(amount)-sum(discount_amount)) AS total,
+                                tbl_order.store_id');
+            $this->db->from('tbl_customer');
+            $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+            $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+            $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+            $this->db->join('users','users.id = tbl_order.store_id');
+            $this->db->where('tbl_product.product_code', $product_code);
+            $this->db->group_by('tbl_order.store_id');
             $query = $this->db->get();
             return $query->result();
         }

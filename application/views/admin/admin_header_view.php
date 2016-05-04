@@ -37,7 +37,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <![endif]-->
 
 
-
+<style>
+  #tooltip {
+    position: absolute;
+    width: 90px;
+    height: auto;
+    padding: 10px;
+    background-color: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+  }
+  #tooltip.hidden {
+    display: none;
+  }
+  #tooltip p {
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .indent {
+    padding-left: 5px;
+  }
+  rect {
+    -moz-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+  rect:hover {
+    fill: orange;
+  }
+  .axis path, .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+  }
+  .axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+  }
+  /*.legend {
+      padding: 2px;
+      border: 2px solid black;
+  }*/
+</style>
 
   </head>
 
@@ -102,6 +151,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Sidebar Menu -->
           <ul class="sidebar-menu">
             <?php
+            $user = $this->ion_auth->user()->row();
+            //echo $user->username;
+
+
               $group = $this->ion_auth->get_users_groups()->row()->name;
               //var_dump($group);
 
@@ -111,7 +164,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               }else{
              ?>
 
-            <li><a href="#"><i class="fa fa-th-list"></i><span><?php echo $group; ?><span></a></li>
+            <li><a href="#"><i class="fa fa-th-list"></i><span><?php echo strtoupper($user->first_name); ?><span></a></li>
             <li><a href="<?=  base_url()?>inventory/invoice"><i class="fa fa-th-list"></i><span>New Invoice<span></a></li>
             <li class="treeview">
               <a href="#" marked="1">
@@ -136,8 +189,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu" style="display: none;">
-                  <li><a href="<?=  base_url()?>inventory/all_invoice" marked="1"><i class="fa fa-circle-o"></i> All Invoice</a></li>
-                  <li><a href="<?=  base_url()?>inventory/get_daily_product_summary" marked="1"><i class="fa fa-circle-o"></i> Daily Summary</a></li>
+                  <li><a href="<?=  base_url()?>inventory/all_invoice_for_admin" marked="1"><i class="fa fa-circle-o"></i> All Invoice</a></li>
+                  <li><a href="<?=  base_url()?>inventory/get_all_daily_product_summary_admin" marked="1"><i class="fa fa-circle-o"></i> Daily Summary</a></li>
                 </ul>
               </li>
               <li class="treeview">

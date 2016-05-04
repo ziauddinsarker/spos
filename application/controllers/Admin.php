@@ -20,7 +20,10 @@ class Admin extends CI_Controller
 
         $user_id = $this->session->userdata('user_id');
         $this->data['total_rows']= $this->inventory_model->count_all_invoice($user_id);
+        $this->data['all_inventory']= $this->inventory_model->count_all_inventory($user_id);
+        $this->data['daily_total_sell']= $this->inventory_model->count_total_sell_today($user_id);
 
+       // var_dump($this->data['all_inventory']);
 
 
         //$all_sess = $this->session->all_userdata();

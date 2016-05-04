@@ -2,14 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="85b3818d-8435-4877-a698-11450e1357f2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/inventory/view_all_invoice_for_admin.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/inventory/view_all_daily_summary_admin.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/inventory/view_single_product_summary_admin.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/Admin.php" afterPath="$PROJECT_DIR$/application/controllers/Admin.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/Inventory.php" afterPath="$PROJECT_DIR$/application/controllers/Inventory.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/Inventory_model.php" afterPath="$PROJECT_DIR$/application/models/Inventory_model.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/admin_footer_view.php" afterPath="$PROJECT_DIR$/application/views/admin/admin_footer_view.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/admin_header_view.php" afterPath="$PROJECT_DIR$/application/views/admin/admin_header_view.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/csv_file.csv" afterPath="$PROJECT_DIR$/assets/csv_file.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/admin/admin_home_view.php" afterPath="$PROJECT_DIR$/application/views/admin/admin_home_view.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/assets/css/main.css" afterPath="$PROJECT_DIR$/assets/css/main.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/inventory/view_all_daily_summary.php" afterPath="$PROJECT_DIR$/application/views/inventory/view_all_daily_summary.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/inventory/view_all_invoice.php" afterPath="$PROJECT_DIR$/application/views/inventory/view_all_invoice.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/inventory/view_daily_summary.php" afterPath="$PROJECT_DIR$/application/views/inventory/view_daily_summary.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/inventory/view_invoice_with_autocomplete.php" afterPath="$PROJECT_DIR$/application/views/inventory/view_invoice_with_autocomplete.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -45,31 +48,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="view_invoice_with_autocomplete.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/inventory/view_invoice_with_autocomplete.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.272727">
-              <caret line="132" column="137" selection-start-line="132" selection-start-column="137" selection-end-line="132" selection-end-column="137" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="admin_footer_view.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/admin/admin_footer_view.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.636364">
-              <caret line="235" column="72" selection-start-line="235" selection-start-column="72" selection-end-line="235" selection-end-column="72" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Inventory.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Inventory.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/controllers/Inventory.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51278603">
-              <caret line="1608" column="0" selection-start-line="1608" selection-start-column="0" selection-end-line="1608" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="1482" column="52" selection-start-line="1482" selection-start-column="20" selection-end-line="1482" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -78,33 +61,63 @@
       <file leaf-file-name="Inventory_model.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/models/Inventory_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.925373">
-              <caret line="364" column="134" selection-start-line="364" selection-start-column="119" selection-end-line="364" selection-end-column="134" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="131" column="49" selection-start-line="131" selection-start-column="49" selection-end-line="131" selection-end-column="49" />
               <folding>
-                <marker date="1461672889846" expanded="true" signature="17029:17966" placeholder="SELECT date ..." />
-                <marker date="1461672889846" expanded="true" signature="28438:29071" placeholder="SELECT tbl_o..tbl_orderdetail..." />
-                <marker date="1461672889846" expanded="true" signature="29302:30323" placeholder="SELECT tbl_o..." />
-                <marker date="1461672889846" expanded="true" signature="30564:31937" placeholder="SELECT tbl_o..." />
+                <marker date="1462359229503" expanded="true" signature="18008:18945" placeholder="SELECT date ..." />
+                <marker date="1462359229503" expanded="true" signature="31882:32515" placeholder="SELECT tbl_o..tbl_orderdetail..." />
+                <marker date="1462359229503" expanded="true" signature="32746:33767" placeholder="SELECT tbl_o..." />
+                <marker date="1462359229503" expanded="true" signature="34008:35381" placeholder="SELECT tbl_o..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="view_all_invoice.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/inventory/view_all_invoice.php">
+      <file leaf-file-name="admin_home_view.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/admin/admin_home_view.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.090909">
-              <caret line="42" column="31" selection-start-line="42" selection-start-column="22" selection-end-line="42" selection-end-column="31" />
+            <state vertical-scroll-proportion="-3.7910447">
+              <caret line="19" column="53" selection-start-line="19" selection-start-column="53" selection-end-line="19" selection-end-column="53" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/js/main.js">
+      <file leaf-file-name="admin_footer_view.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/views/admin/admin_footer_view.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="61" column="85" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="85" />
+            <state vertical-scroll-proportion="0.29913473">
+              <caret line="528" column="44" selection-start-line="528" selection-start-column="44" selection-end-line="528" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="view_single_product_summary_admin.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/inventory/view_single_product_summary_admin.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-4.878788">
+              <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="view_all_daily_summary_admin.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/inventory/view_all_daily_summary_admin.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="24" column="140" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="140" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="admin_header_view.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/admin/admin_header_view.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="3.323077">
+              <caret line="87" column="5" selection-start-line="87" selection-start-column="5" selection-end-line="87" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -118,9 +131,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/application/views/variations/view_edit_product_code.php" />
-        <option value="$PROJECT_DIR$/application/views/variations/view_edit_product_color.php" />
-        <option value="$PROJECT_DIR$/application/views/variations/view_edit_product_fabric.php" />
         <option value="$PROJECT_DIR$/application/views/variations/view_all_product_name.php" />
         <option value="$PROJECT_DIR$/application/views/variations/view_all_product_color.php" />
         <option value="$PROJECT_DIR$/application/views/variations/view_all_product_code.php" />
@@ -153,22 +163,25 @@
         <option value="$PROJECT_DIR$/application/views/admin/admin_home_woven_simple_single_user_rev_view.php" />
         <option value="$PROJECT_DIR$/application/views/admin/admin_home_woven_all_view.php" />
         <option value="$PROJECT_DIR$/application/views/admin/admin_home_woven_view.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/admin_home_view.php" />
         <option value="$PROJECT_DIR$/application/views/inventory/view_inventory.php" />
         <option value="$PROJECT_DIR$/application/config/routes.php" />
         <option value="$PROJECT_DIR$/application/views/inventory/view_add_product_to_inventory.php" />
         <option value="$PROJECT_DIR$/application/controllers/Home.php" />
         <option value="$PROJECT_DIR$/application/controllers/Login.php" />
-        <option value="$PROJECT_DIR$/application/controllers/Admin.php" />
         <option value="$PROJECT_DIR$/application/views/inventory/view_transfter_or_return_to_inventory.php" />
         <option value="$PROJECT_DIR$/application/views/inventory/view_daily_summary.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/admin_header_view.php" />
         <option value="$PROJECT_DIR$/application/views/inventory/view_all_invoice_for_admin.php" />
-        <option value="$PROJECT_DIR$/application/views/admin/admin_footer_view.php" />
-        <option value="$PROJECT_DIR$/application/views/inventory/view_all_invoice.php" />
-        <option value="$PROJECT_DIR$/application/models/Inventory_model.php" />
         <option value="$PROJECT_DIR$/application/views/inventory/view_invoice_with_autocomplete.php" />
+        <option value="$PROJECT_DIR$/application/controllers/Admin.php" />
+        <option value="$PROJECT_DIR$/application/views/inventory/view_all_invoice.php" />
+        <option value="$PROJECT_DIR$/application/views/inventory/view_all_daily_summary.php" />
+        <option value="$PROJECT_DIR$/application/views/inventory/view_all_daily_summary_admin.php" />
+        <option value="$PROJECT_DIR$/application/views/inventory/view_single_product_summary_admin.php" />
         <option value="$PROJECT_DIR$/application/controllers/Inventory.php" />
+        <option value="$PROJECT_DIR$/application/models/Inventory_model.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/admin_header_view.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/admin_home_view.php" />
+        <option value="$PROJECT_DIR$/application/views/admin/admin_footer_view.php" />
       </list>
     </option>
   </component>
@@ -398,7 +411,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Changed Files">
@@ -474,6 +486,7 @@
         <subPane subId="Project Files" />
         <subPane subId="Tests" />
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -595,10 +608,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22139038" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="726" y="52" width="467" height="927" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23636363" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="726" y="52" width="467" height="927" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5017143" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -638,28 +651,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/application/controllers/Inventory.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/inventory/view_invoice_with_autocomplete.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/Admin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/Store.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -835,13 +826,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/admin_home_view.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.818182">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.456057">
@@ -905,13 +889,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/Admin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.522388">
-          <caret line="21" column="85" selection-start-line="21" selection-start-column="85" selection-end-line="21" selection-end-column="85" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/header_view.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.6229913">
@@ -947,10 +924,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/admin_header_view.php">
+    <entry file="file://$PROJECT_DIR$/application/views/inventory/view_invoice_with_autocomplete.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31767616">
-          <caret line="164" column="0" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
+        <state vertical-scroll-proportion="-106.90909">
+          <caret line="147" column="10" selection-start-line="147" selection-start-column="10" selection-end-line="147" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Admin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.8507462">
+          <caret line="21" column="76" selection-start-line="21" selection-start-column="65" selection-end-line="21" selection-end-column="76" />
         </state>
       </provider>
     </entry>
@@ -958,51 +942,80 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="61" column="85" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="85" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/admin/admin_footer_view.php">
+    <entry file="file://$PROJECT_DIR$/application/views/inventory/view_all_daily_summary.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.636364">
-          <caret line="235" column="72" selection-start-line="235" selection-start-column="72" selection-end-line="235" selection-end-column="72" />
-          <folding />
+        <state vertical-scroll-proportion="0.43634117">
+          <caret line="64" column="16" selection-start-line="64" selection-start-column="16" selection-end-line="64" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/inventory/view_all_invoice.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.090909">
-          <caret line="42" column="31" selection-start-line="42" selection-start-column="22" selection-end-line="42" selection-end-column="31" />
+        <state vertical-scroll-proportion="-16.0">
+          <caret line="47" column="145" selection-start-line="47" selection-start-column="20" selection-end-line="47" selection-end-column="145" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Inventory.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1482" column="52" selection-start-line="1482" selection-start-column="20" selection-end-line="1482" selection-end-column="52" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/models/Inventory_model.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.925373">
-          <caret line="364" column="134" selection-start-line="364" selection-start-column="119" selection-end-line="364" selection-end-column="134" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="131" column="49" selection-start-line="131" selection-start-column="49" selection-end-line="131" selection-end-column="49" />
           <folding>
-            <marker date="1461672889846" expanded="true" signature="17029:17966" placeholder="SELECT date ..." />
-            <marker date="1461672889846" expanded="true" signature="28438:29071" placeholder="SELECT tbl_o..tbl_orderdetail..." />
-            <marker date="1461672889846" expanded="true" signature="29302:30323" placeholder="SELECT tbl_o..." />
-            <marker date="1461672889846" expanded="true" signature="30564:31937" placeholder="SELECT tbl_o..." />
+            <marker date="1462359229503" expanded="true" signature="18008:18945" placeholder="SELECT date ..." />
+            <marker date="1462359229503" expanded="true" signature="31882:32515" placeholder="SELECT tbl_o..tbl_orderdetail..." />
+            <marker date="1462359229503" expanded="true" signature="32746:33767" placeholder="SELECT tbl_o..." />
+            <marker date="1462359229503" expanded="true" signature="34008:35381" placeholder="SELECT tbl_o..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/inventory/view_invoice_with_autocomplete.php">
+    <entry file="file://$PROJECT_DIR$/application/views/inventory/view_all_daily_summary_admin.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.272727">
-          <caret line="132" column="137" selection-start-line="132" selection-start-column="137" selection-end-line="132" selection-end-column="137" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="140" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="140" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/Inventory.php">
+    <entry file="file://$PROJECT_DIR$/application/views/admin/admin_header_view.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51278603">
-          <caret line="1608" column="0" selection-start-line="1608" selection-start-column="0" selection-end-line="1608" selection-end-column="0" />
+        <state vertical-scroll-proportion="3.323077">
+          <caret line="87" column="5" selection-start-line="87" selection-start-column="5" selection-end-line="87" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/inventory/view_single_product_summary_admin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.878788">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/admin_home_view.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.7910447">
+          <caret line="19" column="53" selection-start-line="19" selection-start-column="53" selection-end-line="19" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/admin/admin_footer_view.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.29913473">
+          <caret line="528" column="44" selection-start-line="528" selection-start-column="44" selection-end-line="528" selection-end-column="44" />
           <folding />
         </state>
       </provider>

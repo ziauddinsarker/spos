@@ -917,7 +917,7 @@ class Inventory extends CI_Controller {
 	}
 
 
-	/****************Invoice***************/
+	/****************All Invoice for Admin***************/
 	public function all_invoice_for_admin($offset = 0){
 		// Config setup
 		$config['base_url'] = base_url().'/inventory/all_invoice/';
@@ -981,6 +981,9 @@ class Inventory extends CI_Controller {
 		$user_id = $this->session->userdata('user_id');
 		$config['total_rows']= $this->inventory_model->count_all_invoice($user_id);
 
+		$total_row = $this->inventory_model->count_all_invoice($user_id);
+		//var_dump($total_row);
+
 		$config['per_page'] = 10;
 		// I added this extra one to control the number of links to show up at each page.
 		$config['num_links'] = 10;
@@ -1027,6 +1030,8 @@ class Inventory extends CI_Controller {
 			$this->load->view('admin/admin_footer_view',$this->data);
 		}
 	}
+
+
 	
 	public function all_invoice_by_date($offset = 0){
 		// Config setup
@@ -1157,6 +1162,44 @@ class Inventory extends CI_Controller {
 			$this->load->view('admin/admin_footer_view',$this->data);
 		}
 	}
+	/**
+	 * Daily Product Summary for all dates for Admin
+	 */
+
+	function get_all_daily_product_summary_admin(){
+		if (!$this->ion_auth->logged_in()) {
+			// redirect them to the login page
+			redirect('login/index', 'refresh');
+		} else {
+			$this->data['all_daily_summary'] = $this->inventory_model->get_all_daily_product_summary_admin();
+			$this->data['total_sold_by']= $this->inventory_model->count_sold_by_seller();
+			$this->data['total_sold_amount_by']= $this->inventory_model->count_sold_amount_by_seller();
+			$this->load->view('admin/admin_header_view',$this->data);
+			$this->load->view('inventory/view_all_daily_summary_admin',$this->data);
+			$this->load->view('admin/admin_footer_view',$this->data);
+		}
+	}
+
+	/**
+	 * Daily Product Summary for all dates for Admin
+	 */
+
+	function get_single_product_summary_admin($product_code){
+		if (!$this->ion_auth->logged_in()) {
+			// redirect them to the login page
+			redirect('login/index', 'refresh');
+		} else {
+			$this->data['single_summary'] = $this->inventory_model->get_single_product_summary_admin($product_code);
+			$this->data['total_sold_by']= $this->inventory_model->count_sold_by_seller();
+			$this->data['total_sold_amount_by']= $this->inventory_model->count_sold_amount_by_seller();
+			$this->load->view('admin/admin_header_view',$this->data);
+			$this->load->view('inventory/view_single_product_summary_admin',$this->data);
+			$this->load->view('admin/admin_footer_view',$this->data);
+		}
+	}
+
+
+
 
 
 	/**
@@ -1362,6 +1405,9 @@ class Inventory extends CI_Controller {
 			case "outlet3":
 				$username = "OT3";
 				break;
+			case "ditf":
+				$username = "TF";
+				break;
 			default:
 				$username = "OL";
 		}
@@ -1405,7 +1451,7 @@ class Inventory extends CI_Controller {
 		}
 	}
 
-/**
+	/**
 	 * Show Product From Inventory in Invoice
 	 * If there are no product in inventory then product will now show in invoice
 	 */
@@ -1423,6 +1469,27 @@ class Inventory extends CI_Controller {
 					'value' => $row->product_code,
 					'id'=>$row->id,
 					'price'=>$row->product_price
+				);  //Add a row to array
+			}
+		}
+			echo json_encode($data); //echo json string if ajax request
+
+	}
+
+	/**
+	 * Show sold amount by date
+	 */
+
+	public function show_sold_amount_by_date_in_json(){
+		// process posted form data
+		$query = $this->inventory_model->get_sold_amount_by_date(); //Search DB
+		if( ! empty($query) )
+		{
+			foreach( $query as $row )
+			{
+				$data[] = array(
+					'date' => $row->date,
+					'total'=>$row->total
 				);  //Add a row to array
 			}
 		}
@@ -1456,64 +1523,65 @@ class Inventory extends CI_Controller {
 
 
 	function save_invoice(){
-		$customer_data = array(
-			'customer_name' => $this->input->post('name'),
-			'customer_phone' => $this->input->post('phone'),
-			'customer_email' => $this->input->post('email'),
-			'customer_address' => $this->input->post('address'),
-			'sell_by' => $this->input->post('sellsperson'),
-		);
-		$this->db->insert('tbl_customer', $customer_data);
-		$customer_id = $this->db->insert_id();
 
-		for ($i = 0; $i < count($this->input->post('productcode')); $i++){
-			//$store_id = $this->session->userdata('user_id');
-			//var_dump($store_id);
-
-			$sold_by = $this->input->post('sellsperson');
-
-
-			$product_id = $this->input->post('productcodeid')[$i];
-			$product_quantity = $this->input->post('quantity')[$i];
-			$inventory  = $this->inventory_model->get_left_product_on_inventory($product_id,$sold_by);
-
-			echo "Product id: ";
-			var_dump($product_id)[$i];
-
-			echo "Product Quantity: ";
-			var_dump($product_quantity)[$i];
-
-			echo "Inventory ";
-			var_dump($inventory)[$i];
-
-
-
-			foreach($inventory as $inventory){
-				$product_left = $inventory->product_left;
-				$product_sold = $inventory->product_sold;
-			}
-
-			$final_product_left = $product_left - $product_quantity;
-			$final_product_sold = $product_sold + $product_quantity;
-
-			echo "Product Left: ";
-			var_dump($final_product_left);
-
-			echo "Product Sold: ";
-			var_dump($final_product_sold);
-
-
-			$inventory_detail = array(
-				'product_left' => $final_product_left,
-				'product_sold' => $final_product_sold
+		if($this->input->post('save-or-print') == "Save"){
+			$customer_data = array(
+				'customer_name' => $this->input->post('name'),
+				'customer_phone' => $this->input->post('phone'),
+				'customer_email' => $this->input->post('email'),
+				'customer_address' => $this->input->post('address'),
+				'sell_by' => $this->input->post('store'),
 			);
+			$this->db->insert('tbl_customer', $customer_data);
+			$customer_id = $this->db->insert_id();
 
-			echo "Inventory Array: ";
-			var_dump($inventory_detail);
+			for ($i = 0; $i < count($this->input->post('productcode')); $i++){
+				//$store_id = $this->session->userdata('user_id');
+				//var_dump($store_id);
 
-			$this->db->where('product_id',$product_id);
-			$this->db->where('store',$sold_by);
-			$this->db->update('tbl_inventory', $inventory_detail);
+				$sold_by = $this->input->post('store');
+
+				$product_id = $this->input->post('productcodeid')[$i];
+				$product_quantity = $this->input->post('quantity')[$i];
+				$inventory  = $this->inventory_model->get_left_product_on_inventory($product_id,$sold_by);
+
+				//echo "Product id: ";
+				//var_dump($product_id)[$i];
+
+				//echo "Product Quantity: ";
+				//var_dump($product_quantity)[$i];
+
+				//echo "Inventory ";
+				//var_dump($inventory)[$i];
+
+
+
+				foreach($inventory as $inventory){
+					$product_left = $inventory->product_left;
+					$product_sold = $inventory->product_sold;
+				}
+
+				$final_product_left = $product_left - $product_quantity;
+				$final_product_sold = $product_sold + $product_quantity;
+
+				//echo "Product Left: ";
+				//var_dump($final_product_left);
+
+				//echo "Product Sold: ";
+				//var_dump($final_product_sold);
+
+
+				$inventory_detail = array(
+					'product_left' => $final_product_left,
+					'product_sold' => $final_product_sold
+				);
+
+				//echo "Inventory Array: ";
+				//var_dump($inventory_detail);
+
+				$this->db->where('product_id',$product_id);
+				$this->db->where('store',$sold_by);
+				$this->db->update('tbl_inventory', $inventory_detail);
 
 
 				$order_detail = array(
@@ -1529,8 +1597,8 @@ class Inventory extends CI_Controller {
 					'date' => date("Y-m-d"),
 				);
 
-				echo "Order Details: ";
-				var_dump($order_detail);
+				//echo "Order Details: ";
+				//var_dump($order_detail);
 
 				$this->db->insert('tbl_orderdetail', $order_detail);
 				$order_id = $this->db->insert_id();
@@ -1543,9 +1611,250 @@ class Inventory extends CI_Controller {
 
 				$this->db->insert('tbl_order', $order_data);
 			}
-		redirect('inventory/invoice', 'refresh');
+			redirect('inventory/invoice', 'refresh');
 
+		}elseif($this->input->post('save-or-print') == "Print"){
+			$customer_data = array(
+				'customer_name' => $this->input->post('name'),
+				'customer_phone' => $this->input->post('phone'),
+				'customer_email' => $this->input->post('email'),
+				'customer_address' => $this->input->post('address'),
+				'sell_by' => $this->input->post('store'),
+			);
+			$this->db->insert('tbl_customer', $customer_data);
+			$customer_id = $this->db->insert_id();
+
+			for ($i = 0; $i < count($this->input->post('productcode')); $i++){
+				//$store_id = $this->session->userdata('user_id');
+				//var_dump($store_id);
+
+				$sold_by = $this->input->post('store');
+
+
+				$product_id = $this->input->post('productcodeid')[$i];
+				$product_quantity = $this->input->post('quantity')[$i];
+				$inventory  = $this->inventory_model->get_left_product_on_inventory($product_id,$sold_by);
+
+				//echo "Product id: ";
+				//var_dump($product_id)[$i];
+
+				//echo "Product Quantity: ";
+				//var_dump($product_quantity)[$i];
+
+				//echo "Inventory ";
+				//var_dump($inventory)[$i];
+
+				foreach($inventory as $inventory){
+					$product_left = $inventory->product_left;
+					$product_sold = $inventory->product_sold;
+				}
+
+				$final_product_left = $product_left - $product_quantity;
+				$final_product_sold = $product_sold + $product_quantity;
+
+				//echo "Product Left: ";
+				//var_dump($final_product_left);
+
+				//echo "Product Sold: ";
+				//var_dump($final_product_sold);
+
+
+				$inventory_detail = array(
+					'product_left' => $final_product_left,
+					'product_sold' => $final_product_sold
+				);
+
+				//echo "Inventory Array: ";
+				//var_dump($inventory_detail);
+
+				$this->db->where('product_id',$product_id);
+				$this->db->where('store',$sold_by);
+				$this->db->update('tbl_inventory', $inventory_detail);
+
+
+				$order_detail = array(
+					'invoice_no' => $this->input->post('invoice-no'),
+					'booking_code' => $this->input->post('booking-code'),
+					'product_code' => $this->input->post('productcodeid')[$i],
+					'quantity' => $this->input->post('quantity')[$i],
+					'price' => $this->input->post('price')[$i],
+					'discount' => $this->input->post('discount')[$i],
+					'discount_amount' => $this->input->post('discountamount')[$i],
+					'amount' => $this->input->post('amount')[$i],
+					'delivery_charge' => $this->input->post('deliverycharge'),
+					'date' => date("Y-m-d"),
+				);
+
+				//echo "Order Details: ";
+				//var_dump($order_detail);
+
+				$this->db->insert('tbl_orderdetail', $order_detail);
+				$order_id = $this->db->insert_id();
+
+				$order_data = array(
+					'order_id' => $order_id,
+					'customer_id' => $customer_id,
+					'store_id' => $sold_by
+				);
+
+				$this->db->insert('tbl_order', $order_data);
+			}
+
+
+			//PDF output
+			$this->fpdf->SetTitle("ICS - PDF Output");
+			//Set Font for Header
+
+			$this->fpdf->Ln(15);
+			$this->fpdf->setFont('Arial', '', 30);
+			$this->fpdf->setFillColor(255, 255, 255);
+			//$this->fpdf->cell(200,0,"SIMURA",0,0,'C',1);
+			//$this->fpdf->cell(100,6,' ',0,1,'C',1);
+
+			$this->fpdf->Image(base_url('assets/images/simura.png'), 10, 15, 40);
+			$this->fpdf->Cell(35);
+			$this->fpdf->cell(100, 5, ' ', 0, 1, 'C', 1);
+			$this->fpdf->SetFontSize(15);
+			$this->fpdf->SetFillColor(131, 173, 246);
+			$this->fpdf->cell(90, 6, "Invoice", 0, 0, 'R', 1);
+
+
+			$this->db->select("tbl_customer.id,
+							 DATE_FORMAT(tbl_orderdetail.date,'%d/%m/%Y') AS date ,
+							 tbl_orderdetail.invoice_no,
+							 tbl_customer.customer_name,
+							 tbl_customer.customer_phone,
+							 tbl_customer.customer_email,
+							 tbl_customer.customer_address,
+							 tbl_product.product_code,
+							 tbl_orderdetail.quantity,
+							 tbl_orderdetail.price,
+							 tbl_orderdetail.discount,
+							 tbl_orderdetail.discount_amount,
+							 tbl_orderdetail.amount");
+			$this->db->from("tbl_customer");
+			$this->db->join("tbl_order", "tbl_order.customer_id = tbl_customer.id");
+			$this->db->join("tbl_orderdetail", "tbl_order.order_id = tbl_orderdetail.id");
+			$this->db->join("tbl_product", "tbl_product.id = tbl_orderdetail.product_code");
+			$this->db->where("tbl_customer.id", $customer_id);
+			$this->db->limit(1);
+			$query = $this->db->get('');
+			$result = $query->result();
+
+			foreach ($result as $row) {
+
+
+				$this->fpdf->cell(100, 6, ' ', 0, 1, 'L', 1);
+				$this->fpdf->setFont('Arial', '', 10);
+				$this->fpdf->setFillColor(255, 255, 255);
+				$this->fpdf->cell(64.5, 6, "Name: " . $row->customer_name , 0, 0, 'L', 1);
+				$this->fpdf->cell(90, 6, "Date : " . $row->date, 0, 1, 'R', 1);
+
+				$this->fpdf->cell(50, 6, "Phone: " . $row->customer_phone, 0, 0, 'L', 1);
+				$this->fpdf->cell(138, 6, "Invoice No. : " . $row->invoice_no, 0, 1, 'R', 1);
+
+				$this->fpdf->cell(100, 6, "Email : " . $row->customer_email, 0, 0, 'L', 1);
+
+				$this->fpdf->cell(50, 6, ' ', 0, 1, 'C', 1);
+				$this->fpdf->cell(138, 6, "Address : " . $row->customer_address, 0, 0, 'L', 1);
+				$this->fpdf->Ln(12);
+				$this->fpdf->setFont('Arial', '', 14);
+				$this->fpdf->setFillColor(255, 255, 255);
+				$this->fpdf->cell(25, 6, '', 0, 0, 'C', 0);
+
+				$this->fpdf->Ln(1);
+				$this->fpdf->setFont('Arial', '', 10);
+				$this->fpdf->SetFillColor(200, 220, 255);
+			}
+			/**
+			 * Content
+			 *
+			 */
+
+			$this->fpdf->cell(10,6,'#',1,0,'C',1);
+			$this->fpdf->cell(85,6,'Product ID',1,0,'C',1);
+			$this->fpdf->cell(25,6,'Quantity',1,0,'C',1);
+			$this->fpdf->cell(30,6,'Unit Price',1,0,'C',1);
+			//$this->fpdf->cell(25,6,'Discount (%)',1,0,'C',1);
+			//$this->fpdf->cell(35,6,'Discount (BDT)',1,0,'C',1);
+			$this->fpdf->cell(40,6,'Total (bdt)',1,0,'C',1);
+
+
+			/**
+			 * SQL
+			 */
+
+			$this->db->select('*');
+			$this->db->from('tbl_customer');
+			$this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+			$this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+			$this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+			$this->db->where('customer_id',$customer_id);
+			$query = $this->db->get('');
+			$result = $query->result();
+			//var_dump($result);
+			//
+			$id = 0;
+			foreach($result as $row) {
+
+				$id++;
+				$this->fpdf->Ln(6);
+				$this->fpdf->cell(10,6,$id,1,0,1);
+
+				$this->fpdf->cell(85,6,$row->product_code,1,0,1);
+				$this->fpdf->cell(25,6,$row->quantity,1,0,1);
+				$this->fpdf->cell(30,6,$row->price,1,0,1);
+				//$this->fpdf->cell(25,6,$row->discount.'%',1,0,1);
+				//$this->fpdf->cell(35,6,$row->discount_amount,1,0,1);
+				$this->fpdf->cell(40,6,$row->amount,1,0,'R',1);
+			}
+
+
+			$this->db->select('delivery_charge, SUM(amount) AS subtotal, SUM(discount_amount) AS totaldiscount');
+			$this->db->from('tbl_customer');
+			$this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+			$this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+			$this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+			$this->db->where('customer_id',$customer_id);
+			$query = $this->db->get('');
+
+			$result = $query->result();
+			foreach($result as $row) {
+
+				$this->fpdf->Ln(6);
+				$this->fpdf->Cell(120);
+				$this->fpdf->cell(30, 6, 'Subtotal', 1, 0, 1);
+				$this->fpdf->cell(40, 6, $row->subtotal, 1,0,'R',1);
+				$this->fpdf->Ln(6);
+				$this->fpdf->Cell(120);
+				$this->fpdf->cell(30, 6, 'Discount', 1, 0, 1);
+				$this->fpdf->cell(40, 6, $row->totaldiscount, 1, 0,'R',1);
+				$this->fpdf->Ln(6);
+				$this->fpdf->Cell(120);
+				$this->fpdf->cell(30, 6, 'Delivery Charge', 1, 0, 1);
+				$this->fpdf->cell(40, 6, $row->delivery_charge, 1, 0,'R',1);
+				$this->fpdf->Ln(6);
+				$this->fpdf->Cell(120);
+				$this->fpdf->cell(30, 6, 'Grand Total', 1, 0, 1);
+				$this->fpdf->cell(40, 6, (($row->subtotal - $row->totaldiscount) + $row->delivery_charge ).".00", 1, 0,'R',1);
+			}
+
+			$this->fpdf->Ln(20);
+			//$this->fpdf->Cell(10);
+			//$this->fpdf->Cell(0,10,'In Word: '.$this->input->post('inword'),0,0,'L');
+			$this->fpdf->SetY(-30);
+			$this->fpdf->SetLineWidth(0.1);
+			$this->fpdf->SetDash(0,0); //5mm on, 5mm off
+			$this->fpdf->Line(250, 265, 0, 265);
+			//$this->fpdf->SetY(-80);
+			$this->fpdf->Image(base_url('assets/images/simura-ddress.png'),30,270,150);
+
+			//Open PDF on same page
+			$this->fpdf->Output("Invoice.pdf", "I");
+		}
 	}
+
+
 	
 	function print_later_from_invoice_data()
 	{

@@ -10,7 +10,7 @@
             <th>Subtotal</th>
             <th>Discount</th>
             <th>Total</th>
-            <th>Sold By</th>
+            <th>Action</th>
         </thead>
         <tbody class="inventory">
         <?php $i = 1;?>
@@ -22,7 +22,7 @@
                 <td><?php echo $daily->subtotal ;?></td>
                 <td><?php echo $daily->discount ;?></td>
                 <td><?php echo $daily->total ;?></td>
-                <td><?php echo $daily->sell_by ;?></td>
+                <td><a class="btn btn-default" href="<?php base_url();?>get_single_product_summary_admin/<?php echo $daily->product_code ;?>">View</a></td>
             </tr>
         <?php }  ?>
         </tbody>
@@ -36,8 +36,9 @@
 <table class="table-sell">
         <thead>
             <th>ID</th>
-            <th>Name</th>            
-            <th>Total Sell</th>      
+            <th>Store</th>
+            <th>Total Invoice</th>
+
         </thead>
         <tbody class="inventory">
         <?php foreach($total_sold_by as $sell){ ?>
@@ -45,6 +46,7 @@
                 <td><?php echo $sell->userid ;?></td>
                 <td><?php echo $sell->first_name ;?></td>
                 <td><?php echo $sell->total_no_of_sell ;?></td>              
+
             </tr>
         <?php }  ?>
         </tbody>

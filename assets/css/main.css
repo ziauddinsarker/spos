@@ -351,3 +351,8 @@ th.no-style {
     text-align: center;
 	padding:5px;
 }
+
+.deliverycharge {
+    width: 62px;
+	text-align:right;
+}

@@ -115,22 +115,22 @@
 			<tfoot>
 				<th class="no-style" colspan="8"></th>
 				<th >Total</th>
-				<th style="text-align: center; background: silver;" colspan="1" ><span class="total"></span> tk</th>
+				<th style="text-align: right; background: silver;" colspan="1" ><span class="total"></span> tk</th>
 			</tfoot>
 			   <tfoot>
 			   <th class="no-style" colspan="8"></th>
 			   <th >Subtotal</th>
-			   <th style="text-align: center; background: silver;" colspan="1" ><span class="subtotal"></span> tk</th>
+			   <th style="text-align: right; background: silver;" colspan="1" ><span class="subtotal"></span> tk</th>
 			   </tfoot>
 			<tfoot>
 				<th class="no-style" colspan="8"></th>
 				<th >Discount</th>
-				<th style="text-align: center; background: silver;" colspan="1" ><span class="discount"></span> tk</th>
+				<th style="text-align: right; background: silver;" colspan="1" ><span class="discount"></span> tk</th>
 			</tfoot>
 		   <tfoot>
 				<th class="no-style" colspan="8"></th>
 				<th >Delivery Charge</th>
-				<th style="text-align: center; background: silver;" colspan="1" ><span class="delivery-charge"><input type="text" class=" deliverycharge" name="deliverycharge"></span> tk</th>
+				<th style="text-align: right; background: silver;" colspan="1" ><span class="delivery-charge"><input type="text" class=" deliverycharge" name="deliverycharge"></span> tk</th>
 			</tfoot>
 
 		</table>
@@ -138,11 +138,11 @@
 				<input type="hidden" class="form-control " id="inword" name="inword">
 			</div>
 
-		<input type="hidden" name="sellsperson" value="<?php $user = $this->ion_auth->user()->row(); echo $user->id;?>">
-		<input type="submit" class="btn btn-primary inv-btn" name="save" value="Save">
+		<input type="hidden" name="store" value="<?php $user = $this->ion_auth->user()->row(); echo $user->id;?>">
+		<input type="submit" class="btn btn-primary inv-btn" name="save-or-print" value="Print">
+		<input type="submit" class="btn btn-primary inv-btn" name="save-or-print" value="Save">
 		<!--<input type="submit" class="btn btn-primary inv-btn" name="print" value="Print" formtarget="_blank">-->
 		</div>
 	</form>
 	</div>
 </section>
-

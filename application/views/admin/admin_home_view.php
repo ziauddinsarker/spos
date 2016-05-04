@@ -6,14 +6,33 @@
             <?php
             $group = $this->ion_auth->get_users_groups()->row()->name;
           ?>
+
             <div class="row">
                 <?php
                 if($group == 'admin') { ?>
                     <h1>Welcome Admin</h1>
+                    <h2>Sells Graph</h2>
+
+                    <div id="searchVolume"></div>
+
+                    <div id="tooltip" class="hidden">
+                        <p class="heading"><span id="keyword">word</span></p>
+                        <p class="heading">Total Sell</p>
+                        <p class="indent"><span id="volVal">5</span></p>
+                        <p class="heading">CPC</p>
+                        <p class="indent">$<span id="cpcVal">5</span></p>
+                    </div>
+                    <button id="change">Switch Global</button>
+
+
+
+
+
+
                 <?php }elseif($group == 'sales'){ ?>
                     <h2>Welcome to  <?php $user = $this->ion_auth->user()->row(); echo $user->first_name; //Get First Name and Use as a Store Name?></h2>
 
-                <?php } ?>
+
 
             </div>
                 <div class="row">
@@ -24,10 +43,10 @@
                             <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
                             <div class="info-box-content">
 
-                                <span class="info-box-text">Invoice</span>
+                                <span class="info-box-text">Total Invoice</span>
                                   <span class="info-box-number">
                                       <?php
-                                      //echo $total_invoice_today;
+                                      echo $total_rows;
                                       ?>
                                   </span>
 
@@ -43,12 +62,25 @@
 
                             <div class="info-box-content">
 
-                                <span class="info-box-text">Inventory</span>
+                                <span class="info-box-text">Products In Inventory</span>
                                   <span class="info-box-number">
 
-                                      <?php
-                                      //echo $total_rows;
-                                      ?>
+                                      <?php foreach($all_inventory as $inv){ ?>
+                                      <?php //echo $inv->Inventory;?>
+
+                                          <?php
+                                          $inventory = $inv->Inventory;
+                                          if(($inventory == "0") || ($inventory == NULL)){
+                                              echo "0 ";
+                                          }else {
+                                              echo $inventory;
+                                          }
+                                          ?>
+
+
+
+
+                                      <?php }  ?>
 
                                   </span>
 
@@ -64,12 +96,20 @@
 
                             <div class="info-box-content">
 
-                                <span class="info-box-text">Summary</span>
+                                <span class="info-box-text">Today Sell</span>
                                   <span class="info-box-number">
 
-                                      <?php
-                                      //echo $total_rows;
-                                      ?>
+                                       <?php foreach($daily_total_sell as $daily_total){ ?>
+                                           <?php
+                                           $sell = $daily_total->daily_total_sell;
+                                           if(($sell == "0") || ($sell == NULL)){
+                                               echo "0 ";
+                                           }else {
+                                               echo $daily_total->daily_total_sell;
+                                           }
+                                           echo "TK";
+                                           ?>
+                                       <?php }  ?>
 
                                   </span>
 
@@ -78,6 +118,6 @@
                     </div><!-- /.info-box -->
                 </div><!-- /.col -->
         </div>
-
+        <?php } ?>
 
         </section><!-- /.content -->
