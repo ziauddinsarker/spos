@@ -32,7 +32,15 @@
             <th></th>
         </thead>
         <tbody class="inventory">
-        <?php $i = 1;?>
+        <?php 
+		if(($showed_invoice == 0) || ($showed_invoice == NULL)){
+			$i = 1;	
+		}else{
+			$i = $showed_invoice + 1;
+		} 	
+		
+		
+		?>
         <?php foreach($invoices as $inv){ ?>
             <tr>
                 <td><?php echo $i++; ?></td>

@@ -697,6 +697,25 @@ class Inventory_model extends CI_Model
             return $query->result();
         }
 
+        function get_all_inventory_admin()
+        {
+            $this->db->select('*');
+            $this->db->select('tbl_orderdetail.date,
+                                tbl_product.product_code,
+                                tbl_orderdetail.price,
+                                Sum(tbl_orderdetail.quantity) AS totalquantity,
+                                Sum(tbl_orderdetail.amount) AS subtotal,
+                                Sum(tbl_orderdetail.discount_amount) AS discount,
+                                (SUM(amount)-sum(discount_amount)) AS total');
+            $this->db->from('tbl_customer');
+            $this->db->join('tbl_order','tbl_order.customer_id = tbl_customer.id');
+            $this->db->join('tbl_orderdetail','tbl_order.order_id = tbl_orderdetail.id');
+            $this->db->join('tbl_product','tbl_product.id = tbl_orderdetail.product_code');
+            $this->db->group_by('tbl_product.product_code');
+            $query = $this->db->get();
+            return $query->result();
+        }
+
         function get_single_product_summary_admin($product_code)
         {
             $this->db->select('*');
@@ -715,6 +734,19 @@ class Inventory_model extends CI_Model
             $this->db->join('users','users.id = tbl_order.store_id');
             $this->db->where('tbl_product.product_code', $product_code);
             $this->db->group_by('tbl_order.store_id');
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+
+        function get_single_product_inventory_summary_admin($product_code)
+        {
+            $this->db->select('tbl_product.product_code,tbl_inventory.product_left,tbl_inventory.product_sold,users.username');
+            $this->db->from('tbl_inventory');
+            $this->db->join('tbl_product','tbl_inventory.product_id = tbl_product.id');
+            $this->db->join('tbl_product_name','tbl_product.product_name = tbl_product_name.id');
+            $this->db->join('users','users.id = tbl_inventory.store');
+            $this->db->where('tbl_product.product_code', $product_code);
             $query = $this->db->get();
             return $query->result();
         }
@@ -871,6 +903,18 @@ class Inventory_model extends CI_Model
             $this->db->join('tbl_product','tbl_inventory.product_id = tbl_product.id');
             $this->db->join('tbl_product_name','tbl_product.product_name = tbl_product_name.id');
             $this->db->where('store',$store_id);
+            $query = $this->db->get();
+            return $query->result();
+        }
+
+        function get_all_inventory()
+        {
+            $this->db->select('tbl_product.product_code,SUM(tbl_inventory.product_left) as product_left,tbl_inventory.product_sold');
+            $this->db->from('tbl_inventory');
+            $this->db->join('tbl_product','tbl_inventory.product_id = tbl_product.id');
+            $this->db->join('tbl_product_name','tbl_product.product_name = tbl_product_name.id');
+            $this->db->join('users','users.id = tbl_inventory.store');
+            $this->db->group_by('tbl_product.product_code');
             $query = $this->db->get();
             return $query->result();
         }

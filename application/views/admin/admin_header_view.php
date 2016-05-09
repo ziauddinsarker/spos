@@ -172,6 +172,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu" style="display: none;">
+                <li><a href="<?=  base_url()?>inventory/index" marked="1"><i class="fa fa-circle-o"></i> All Inventory</a></li>
                 <li><a href="<?=  base_url()?>inventory/add_to_inventory" marked="1"><i class="fa fa-circle-o"></i> Add Inventory</a></li>
                 <li><a href="<?=  base_url()?>inventory/transfer_or_return" marked="1"><i class="fa fa-circle-o"></i>Return/Transfer</a></li>
            </ul>
@@ -191,6 +192,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <ul class="treeview-menu" style="display: none;">
                   <li><a href="<?=  base_url()?>inventory/all_invoice_for_admin" marked="1"><i class="fa fa-circle-o"></i> All Invoice</a></li>
                   <li><a href="<?=  base_url()?>inventory/get_all_daily_product_summary_admin" marked="1"><i class="fa fa-circle-o"></i> Daily Summary</a></li>
+                  <li><a href="<?=  base_url()?>inventory/all_inventory" marked="1"><i class="fa fa-circle-o"></i> All Inventory</a></li>
                 </ul>
               </li>
               <li class="treeview">
@@ -210,7 +212,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
               <li class="treeview">
                 <a href="#" marked="1">
-                  <i class="fa fa-cog"></i> <span>Store</span>
+                  <i class="fa fa-cog"></i> <span>Products</span>
                   <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu" style="display: none;">

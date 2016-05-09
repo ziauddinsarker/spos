@@ -5,10 +5,6 @@
 		<div>
 			<h1 class="page-header">Invoice</h1>
 		</div>
-
-
-
-
 			<div class="row">
 				<div class="col-md-4">
 

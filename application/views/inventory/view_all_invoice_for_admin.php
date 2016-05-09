@@ -10,10 +10,10 @@
         ?>
 
     <h3>Total Invoice: <?php echo $count_invoice; ?></h3>
-    <form class="form-inline" role="form" action="<?=  base_url()?>inventory/gettotalreport" method="post">
+    <form class="form-inline" role="form" action="<?=  base_url()?>inventory/gettotalreportbyadmin" method="post">
         <input class="btn btn-default" type="submit" value="Get Report">
     </form>
-	<form class="form-inline" role="form" action="<?=  base_url()?>inventory/gettotalverbosereport" method="post">
+	<form class="form-inline" role="form" action="<?=  base_url()?>inventory/gettotalverbosereportbyadmin" method="post">
         <input class="btn btn-default" type="submit" value="Get Verbose Report">
     </form>
 
@@ -32,7 +32,13 @@
             <th></th>
         </thead>
         <tbody class="inventory">
-        <?php $i = 1;?>
+        <?php 
+			if(($showed_invoice == 0) || ($showed_invoice == NULL)){
+				$i = 1;	
+			}else{
+				$i = $showed_invoice + 1;
+			} 				
+		?>
         <?php foreach($invoices as $inv){ ?>
             <tr>
                 <td><?php echo $i++; ?></td>

@@ -20,7 +20,10 @@ class Inventory extends CI_Controller {
 		$data['product_code'] = $this->inventory_model->get_product_code();
 
 		$user_id = $this->session->userdata('user_id');
+
 		$this->data['inventorys'] = $this->inventory_model->get_inventory($user_id);
+
+		$this->data['allinventorys'] = $this->inventory_model->get_all_inventory($user_id);
 
 		//$this->data['inventory_product_id'] = $this->inventory_model->get_left_product_on_inventory(23);
 		//echo $this->data['inventory_product_id']->product_left();
@@ -47,6 +50,20 @@ class Inventory extends CI_Controller {
 		} else {
 			$this->load->view('admin/admin_header_view', $this->data);
 			$this->load->view('inventory/view_inventory', $this->data);
+			$this->load->view('admin/admin_footer_view', $this->data);
+		}
+	}
+	/**
+	 * Inventory Index
+	 */
+	public function all_inventory()
+	{ //Check if user is logged in or not. If not then else statement works otherwise redirect to login page
+		if (!$this->ion_auth->logged_in()) {
+			// redirect them to the login page
+			redirect('login/index', 'refresh');
+		} else {
+			$this->load->view('admin/admin_header_view', $this->data);
+			$this->load->view('inventory/view_all_inventory', $this->data);
 			$this->load->view('admin/admin_footer_view', $this->data);
 		}
 	}
@@ -137,14 +154,20 @@ class Inventory extends CI_Controller {
 	 * Show  Add New Product Page
 	 */
 	function add_product(){
-		$data['name'] = $this->inventory_model->get_product_name();
-		//$data['code'] = $this->inventory_model->get_product_code();
-		$data['color'] = $this->inventory_model->get_product_color();
-		$data['fabric'] = $this->inventory_model->get_product_fabric();
-		$data['category'] = $this->inventory_model->get_product_category();
-		$this->load->view('admin/admin_header_view',$this->data);
-		$this->load->view('variations/view_add_product',$data);
-		$this->load->view('admin/admin_footer_view',$this->data);
+		 //Check if user is logged in or not. If not then else statement works otherwise redirect to login page
+        if (!$this->ion_auth->logged_in()) {
+            // redirect them to the login page
+            redirect('login/index', 'refresh');
+        } else {
+			$data['name'] = $this->inventory_model->get_product_name();
+			//$data['code'] = $this->inventory_model->get_product_code();
+			$data['color'] = $this->inventory_model->get_product_color();
+			$data['fabric'] = $this->inventory_model->get_product_fabric();
+			$data['category'] = $this->inventory_model->get_product_category();
+			$this->load->view('admin/admin_header_view',$this->data);
+			$this->load->view('variations/view_add_product',$data);
+			$this->load->view('admin/admin_footer_view',$this->data);
+		}
 	}
 
 
@@ -338,16 +361,28 @@ class Inventory extends CI_Controller {
 	/**************** Product Name Start**********************/
 
 	function all_product_name(){
+		 //Check if user is logged in or not. If not then else statement works otherwise redirect to login page
+        if (!$this->ion_auth->logged_in()) {
+            // redirect them to the login page
+            redirect('login/index', 'refresh');
+        } else {
 		$this->data['product_name'] = $this->inventory_model->get_all_product_name();
 		$this->load->view('admin/admin_header_view',$this->data);
 		$this->load->view('variations/view_all_product_name',$this->data);
 		$this->load->view('admin/admin_footer_view',$this->data);
+		}
 	}
 
 	function add_product_name(){
-		$this->load->view('admin/admin_header_view',$this->data);
-		$this->load->view('variations/view_add_product_name');
-		$this->load->view('admin/admin_footer_view',$this->data);
+		 //Check if user is logged in or not. If not then else statement works otherwise redirect to login page
+        if (!$this->ion_auth->logged_in()) {
+            // redirect them to the login page
+            redirect('login/index', 'refresh');
+        } else {
+			$this->load->view('admin/admin_header_view',$this->data);
+			$this->load->view('variations/view_add_product_name');
+			$this->load->view('admin/admin_footer_view',$this->data);
+		}
 	}
 
 	function save_to_product_name(){
@@ -376,29 +411,41 @@ class Inventory extends CI_Controller {
 	}
 
 	function edit_product_name(){
+		 //Check if user is logged in or not. If not then else statement works otherwise redirect to login page
+        if (!$this->ion_auth->logged_in()) {
+            // redirect them to the login page
+            redirect('login/index', 'refresh');
+        } else {
 
-		$product_name_id = $this->uri->segment(3);
-		if ($product_name_id == NULL) {
-			redirect('variations/get_all_product_name');
+			$product_name_id = $this->uri->segment(3);
+			if ($product_name_id == NULL) {
+				redirect('variations/get_all_product_name');
+			}
+
+			$dt = $this->inventory_model->edit_product_name($product_name_id);
+			$data['product_name'] = $dt->product_name;
+			$data['product_name_id'] = $dt->id;
+
+			$this->load->view('admin/admin_header_view',$this->data);
+			$this->load->view('variations/view_edit_product_name',$data);
+			$this->load->view('admin/admin_footer_view',$this->data);
 		}
-
-		$dt = $this->inventory_model->edit_product_name($product_name_id);
-		$data['product_name'] = $dt->product_name;
-		$data['product_name_id'] = $dt->id;
-
-		$this->load->view('admin/admin_header_view',$this->data);
-		$this->load->view('variations/view_edit_product_name',$data);
-		$this->load->view('admin/admin_footer_view',$this->data);
 	}
 
 	function update_product_name(){
-		if ($this->input->post('update')) {
-			$productNameId = $this->input->post('product-name-id');
-			$this->inventory_model->update_product_name($productNameId);
-			redirect('inventory/all_product_name');
-		} else{
-			$id = $this->input->post('product-name-id');
-			redirect('inventory/edit_product_name/'. $id);
+		 //Check if user is logged in or not. If not then else statement works otherwise redirect to login page
+        if (!$this->ion_auth->logged_in()) {
+            // redirect them to the login page
+            redirect('login/index', 'refresh');
+        } else {
+			if ($this->input->post('update')) {
+				$productNameId = $this->input->post('product-name-id');
+				$this->inventory_model->update_product_name($productNameId);
+				redirect('inventory/all_product_name');
+			} else{
+				$id = $this->input->post('product-name-id');
+				redirect('inventory/edit_product_name/'. $id);
+			}
 		}
 	}
 
@@ -920,7 +967,7 @@ class Inventory extends CI_Controller {
 	/****************All Invoice for Admin***************/
 	public function all_invoice_for_admin($offset = 0){
 		// Config setup
-		$config['base_url'] = base_url().'/inventory/all_invoice/';
+		$config['base_url'] = base_url().'/inventory/all_invoice_for_admin/';
 		//$config['total_rows']= $this->db->count_all('brand');
 		$config['total_rows']= $this->inventory_model->count_all_invoice_for_admin();
 
@@ -957,8 +1004,9 @@ class Inventory extends CI_Controller {
 		} else {
 			//$data['total_rows']= $this->inventory_model->count_all_invoice();
 			//var_dump($data['total_rows']);
-			$user_id = $this->session->userdata('user_id');
-
+			//$user_id = $this->session->userdata('user_id');
+			$this->data['showed_invoice'] = $this->uri->segment(3);
+			
 			$this->data['invoices'] = $this->inventory_model->get_all_invoice_for_admin(10,$offset);
 			$this->data['count_invoice'] = $this->inventory_model->count_all_invoice_for_admin();
 			$this->data['total_sold_by']= $this->inventory_model->count_sold_by_seller();
@@ -1019,6 +1067,9 @@ class Inventory extends CI_Controller {
 			//var_dump($data['total_rows']);
 			$user_id = $this->session->userdata('user_id');
 
+			
+			$this->data['showed_invoice'] = $this->uri->segment(3);
+			
 			$this->data['invoices'] = $this->inventory_model->get_all_invoice(10,$offset,$user_id);
 			$this->data['count_invoice'] = $this->inventory_model->count_all_invoice($user_id);
 			$this->data['total_sold_by']= $this->inventory_model->count_sold_by_seller();
@@ -1184,6 +1235,24 @@ class Inventory extends CI_Controller {
 	 * Daily Product Summary for all dates for Admin
 	 */
 
+	function get_all_inventory_admin(){
+		if (!$this->ion_auth->logged_in()) {
+			// redirect them to the login page
+			redirect('login/index', 'refresh');
+		} else {
+			$this->data['all_daily_summary'] = $this->inventory_model->get_all_inventory_admin();
+			$this->data['total_sold_by']= $this->inventory_model->count_sold_by_seller();
+			$this->data['total_sold_amount_by']= $this->inventory_model->count_sold_amount_by_seller();
+			$this->load->view('admin/admin_header_view',$this->data);
+			$this->load->view('inventory/view_all_daily_summary_admin',$this->data);
+			$this->load->view('admin/admin_footer_view',$this->data);
+		}
+	}
+
+	/**
+	 * Daily Product Summary for all dates for Admin
+	 */
+
 	function get_single_product_summary_admin($product_code){
 		if (!$this->ion_auth->logged_in()) {
 			// redirect them to the login page
@@ -1198,9 +1267,19 @@ class Inventory extends CI_Controller {
 		}
 	}
 
-
-
-
+	function get_single_product_inventory_summary_admin($product_code){
+		if (!$this->ion_auth->logged_in()) {
+			// redirect them to the login page
+			redirect('login/index', 'refresh');
+		} else {
+			$this->data['single_summary'] = $this->inventory_model->get_single_product_inventory_summary_admin($product_code);
+			$this->data['total_sold_by']= $this->inventory_model->count_sold_by_seller();
+			$this->data['total_sold_amount_by']= $this->inventory_model->count_sold_amount_by_seller();
+			$this->load->view('admin/admin_header_view',$this->data);
+			$this->load->view('inventory/view_single_product_inventory_summary_admin',$this->data);
+			$this->load->view('admin/admin_footer_view',$this->data);
+		}
+	}
 
 	/**
 	 * Get Report in CSV format
@@ -1258,6 +1337,35 @@ class Inventory extends CI_Controller {
 		$name = 'Total-summary-'.date('Y-m-d').'.csv';
 		force_download($name, $data);
 	}
+	
+	/**
+	 * Get Total Report in CSV format
+	 */
+	function gettotalreportbyadmin() {
+		$this->load->dbutil();
+		//get the object
+		/*
+			$date = $this->input->post('datereport');
+			if ($date == ''){
+				$date = date('Y-m-d');
+			}else{
+				$date = $this->input->post('datereport');
+			}
+		*/
+		//$user_id = $this->session->userdata('user_id');
+		$report = $this->inventory_model->gettotalCSVbyadmin();
+
+		$delimiter = ",";
+		$newline = "\r\n";
+		$new_report = $this->dbutil->csv_from_result($report, $delimiter, $newline);
+		// write file
+		write_file($this->file_path . '/csv_file.csv', $new_report);
+		//force download from server
+		$this->load->helper('download');
+		$data = file_get_contents($this->file_path . '/csv_file.csv');
+		$name = 'Total-summary-'.date('Y-m-d').'.csv';
+		force_download($name, $data);
+	}
 
 
 	/**
@@ -1267,6 +1375,25 @@ class Inventory extends CI_Controller {
 		$this->load->dbutil();
 		$user_id = $this->session->userdata('user_id');
 		$report = $this->inventory_model->gettotalverboseCSV($user_id);
+		$delimiter = ",";
+		$newline = "\r\n";
+		$new_report = $this->dbutil->csv_from_result($report, $delimiter, $newline);
+		// write file
+		write_file($this->file_path . '/csv_file.csv', $new_report);
+		//force download from server
+		$this->load->helper('download');
+		$data = file_get_contents($this->file_path . '/csv_file.csv');
+		$name = 'All-Verbose-Data-'.date('d-m-Y').'.csv';
+		force_download($name, $data);
+	}
+	
+	/**
+	 * Get Total Verbose Report in CSV format by ADMIN
+	 */
+	function gettotalverbosereportbyadmin() {
+		$this->load->dbutil();
+		//$user_id = $this->session->userdata('user_id');
+		$report = $this->inventory_model->gettotalverboseCSVbyadmin();
 		$delimiter = ",";
 		$newline = "\r\n";
 		$new_report = $this->dbutil->csv_from_result($report, $delimiter, $newline);
@@ -1344,8 +1471,8 @@ class Inventory extends CI_Controller {
 		$store_id = $this->session->userdata('user_id');
 		$total_invoice = $this->inventory_model->count_all_outlet_invoice($store_id);
 
-		echo "Total Invoice: ";
-		var_dump($total_invoice);
+		//echo "Total Invoice: ";
+		//var_dump($total_invoice);
 
 		$leadingzeros = '0000';
 		$dailyleadingzeros = '000';
@@ -1858,12 +1985,25 @@ class Inventory extends CI_Controller {
 	
 	function print_later_from_invoice_data()
 	{
-		$customer_id = $this->uri->segment(3);
-		if ($customer_id == NULL) {
-			redirect('inventory/all_invoice_by_date');
+		
+		if(is_numeric($this->uri->segment(3))){
+			$customer_id = $this->uri->segment(3);
+			
+			if ($customer_id == NULL) {
+				redirect('inventory/all_invoice_by_date');
+			}
+		} 
+				
+		if(is_numeric($this->uri->segment(4))){
+			$customer_id = $this->uri->segment(4);
+			
+			if ($customer_id == NULL) {
+				redirect('inventory/all_invoice_by_date');
+			}
 		}
-
-
+	
+		
+	
 		//PDF output
 		$this->fpdf->SetTitle("ICS - PDF Output");
 		//Set Font for Header

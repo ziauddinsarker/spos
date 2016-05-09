@@ -11,6 +11,7 @@
                 <?php
                 if($group == 'admin') { ?>
                     <h1>Welcome Admin</h1>
+					<?php /*
                     <h2>Sells Graph</h2>
 
                     <div id="searchVolume"></div>
@@ -22,11 +23,8 @@
                         <p class="heading">CPC</p>
                         <p class="indent">$<span id="cpcVal">5</span></p>
                     </div>
-                    <button id="change">Switch Global</button>
-
-
-
-
+                    <button id="change">Switch Global</button> */
+				?>
 
 
                 <?php }elseif($group == 'sales'){ ?>
@@ -39,7 +37,7 @@
 
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
-                        <a href="<?php base_url()?>inventory/invoice">
+                        <a href="<?php base_url()?>inventory/all_invoice">
                             <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
                             <div class="info-box-content">
 
@@ -88,7 +86,7 @@
                         </a>
                     </div><!-- /.info-box -->
                 </div><!-- /.col -->
-
+<?php /*
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     <div class="info-box">
                         <a href="<?php base_url() ?>inventory/get_daily_product_summary">
@@ -117,6 +115,8 @@
                         </a>
                     </div><!-- /.info-box -->
                 </div><!-- /.col -->
+				
+				*/ ?>
         </div>
         <?php } ?>
 
